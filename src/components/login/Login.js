@@ -35,8 +35,11 @@ export default function Login() {
                 window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
             })
             .catch((error) => {
-                window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
-                //setError(error.response.data.error);
+                if (error.response.status === 302) {
+                    window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
+                } else {
+                    setError(error.response.data.error);
+                }
             });
     }
 

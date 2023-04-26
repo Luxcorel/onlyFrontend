@@ -39,8 +39,11 @@ export default function Register() {
                 window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
             })
             .catch(error => {
-                window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
-                //setError(error.response.data.error);
+                if (error.response.status === 302) {
+                    window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
+                } else {
+                    setError(error.response.data.error);
+                }
             });
     }
 
