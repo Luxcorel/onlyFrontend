@@ -32,7 +32,7 @@ export default function Login() {
                 }
             )
             .then(() => {
-                window.location.href = 'onlyfrontend-production.up.railway.app/Dashboard';
+                window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard/';
             })
             .catch((error) => {
                 setError(error.response.data.error);

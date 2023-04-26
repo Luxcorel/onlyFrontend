@@ -24,7 +24,7 @@ async function logout() {
         console.log(error)
     }
 
-    window.location.replace("onlyfrontend-production.up.railway.app");
+    window.location.replace("https://onlyfrontend-production.up.railway.app/");
 }
 
 export default function NavBar() {
