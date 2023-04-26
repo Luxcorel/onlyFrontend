@@ -36,7 +36,7 @@ export default function Register() {
             withCredentials: true
         })
             .then(response => {
-                window.location.href = 'http://localhost:3000/Login/';
+                window.location.href = 'onlyfrontend-production.up.railway.app/Login/';
             })
             .catch(error => {
                 setError(error.response.data.error);
