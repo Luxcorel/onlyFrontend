@@ -22,7 +22,7 @@ export default function Login() {
 
         axios
             .post(
-                'http://localhost:8080/plz',
+                'https://onlybackend-production.up.railway.app/plz',
                 `username=${username}&password=${password}`,
                 {
                     headers: {

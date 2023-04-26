@@ -17,10 +17,10 @@ export default function Dashboard() {
 
     useEffect(() => {
 
-        axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
+        axios.get("https://onlybackend-production.up.railway.app/fetch-current-user-id", {withCredentials: true}).then((response) => {
             setUserId(response.data)
             console.log(response.data)
-            axios.get("http://localhost:8080/dashboard/" + response.data, {withCredentials: true}).then((response) => {
+            axios.get("https://onlybackend-production.up.railway.app/dashboard/" + response.data, {withCredentials: true}).then((response) => {
                 setDashboard(response.data);
                 setIsLoading(false);
             });

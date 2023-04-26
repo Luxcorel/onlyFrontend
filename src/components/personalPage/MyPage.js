@@ -19,9 +19,9 @@ export default function PersonalPage() {
         const fetchData = async () => {
             try {
 
-                //await axios.get("http://localhost:8080/test-login")
+                //await axios.get("https://onlybackend-production.up.railway.app/test-login")
 
-                const response1 = await axios.get(`http://localhost:8080/principal-username`,
+                const response1 = await axios.get(`https://onlybackend-production.up.railway.app/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -31,7 +31,7 @@ export default function PersonalPage() {
 
                 setUsername(response1.data);
 
-                const response2 = await axios.get(`http://localhost:8080/fetch-about-me?username=${response1.data}`,
+                const response2 = await axios.get(`https://onlybackend-production.up.railway.app/fetch-about-me?username=${response1.data}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -66,7 +66,7 @@ export default function PersonalPage() {
 
     const updateUserText = async () => {
         try {
-            await axios.put(`http://localhost:8080/update-about-me`,
+            await axios.put(`https://onlybackend-production.up.railway.app/update-about-me`,
                 {text: userData}, {
                     headers: {
                         'Content-type': 'application/json',

@@ -18,8 +18,8 @@ export default function StandardToolbar(props) {
     };
 
     useEffect(() => {
-        axios.get("http://localhost:8080/fetch-current-user-id", {withCredentials: true}).then((response) => {
-            axios.get("http://localhost:8080/studio/getStocksAndCategories/" + response.data, {withCredentials: true}).then((response) => {
+        axios.get("https://onlybackend-production.up.railway.app/fetch-current-user-id", {withCredentials: true}).then((response) => {
+            axios.get("https://onlybackend-production.up.railway.app/studio/getStocksAndCategories/" + response.data, {withCredentials: true}).then((response) => {
                 setStockTree(response.data);
             })
         })

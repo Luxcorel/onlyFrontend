@@ -281,7 +281,7 @@ export default function Studio() {
                 content: chartToSend
             };
 
-            axios.post("http://localhost:8080/studio/createModule", postChart, {withCredentials: true})
+            axios.post("https://onlybackend-production.up.railway.app/studio/createModule", postChart, {withCredentials: true})
             console.log(categoryId)
             setSuccessMessage("SUCCESS: Your chart has been posted")
             showSuccessMessageForDuration(successMessage, 5000)

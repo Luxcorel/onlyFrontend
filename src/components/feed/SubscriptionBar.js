@@ -13,7 +13,7 @@ export default function SubscriptionBar() {
         const getData = async () => {
             try {
 
-                const response = await axios.get(`http://localhost:8080/user-subscription-list-sorted-by-postdate`,
+                const response = await axios.get(`https://onlybackend-production.up.railway.app/user-subscription-list-sorted-by-postdate`,
                     {
                         headers: {
                             'Content-type': 'application/json'

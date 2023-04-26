@@ -16,7 +16,7 @@ export default function PersonalPage() {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
+                const response = await axios.get(`https://onlybackend-production.up.railway.app/fetch-about-me-with-sub-info?username=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -56,7 +56,7 @@ export default function PersonalPage() {
             console.log('Subscribing to:', username);
 
             await axios.post(
-                `http://localhost:8080/subscribe?username=${username}`,
+                `https://onlybackend-production.up.railway.app/subscribe?username=${username}`,
                 {},
                 {
                     headers: {
@@ -75,7 +75,7 @@ export default function PersonalPage() {
             console.log('Unsubscribing to:', username);
 
             await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${username}`,
+                `https://onlybackend-production.up.railway.app/unsubscribe?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -90,7 +90,7 @@ export default function PersonalPage() {
 
     async function updateUserData() {
         try {
-            const response = await axios.get(`http://localhost:8080/fetch-about-me-with-sub-info?username=${username}`,
+            const response = await axios.get(`https://onlybackend-production.up.railway.app/fetch-about-me-with-sub-info?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'

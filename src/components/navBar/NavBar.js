@@ -12,7 +12,7 @@ Make logout function (POST / logout)
 
 async function logout() {
     try {
-        await axios.post(`http://localhost:8080/logout`,
+        await axios.post(`https://onlybackend-production.up.railway.app/logout`,
             {},
             { headers: {
                     'Content-type': 'application/json'

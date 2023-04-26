@@ -25,7 +25,7 @@ export default function Register() {
         event.preventDefault();
         setError(null);
 
-        axios.post('http://localhost:8080/register', {
+        axios.post('https://onlybackend-production.up.railway.app/register', {
             email: email,
             username: username,
             password: password

@@ -12,7 +12,7 @@ export default function SearchPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
+                const response = await axios.get(`https://onlybackend-production.up.railway.app/search-all-analysts-include-sub-info`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -38,7 +38,7 @@ export default function SearchPage() {
 
 
     const getAllAnalysts = () => {
-        axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
+        axios.get(`https://onlybackend-production.up.railway.app/search-all-analysts-include-sub-info`,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -63,7 +63,7 @@ export default function SearchPage() {
     const onSearch = (searchTerm) => {
         console.log('Performing search with searchTerm:', searchTerm);
 
-        axios.get(`http://localhost:8080/search-analyst-include-sub-info?search=${searchTerm}`,
+        axios.get(`https://onlybackend-production.up.railway.app/search-analyst-include-sub-info?search=${searchTerm}`,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -97,7 +97,7 @@ export default function SearchPage() {
 
     async function updateSearchData() {
         try {
-            const response = await axios.get(`http://localhost:8080/search-all-analysts-include-sub-info`,
+            const response = await axios.get(`https://onlybackend-production.up.railway.app/search-all-analysts-include-sub-info`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -116,7 +116,7 @@ export default function SearchPage() {
             console.log('Subscribing to:', username);
 
             await axios.post(
-                `http://localhost:8080/subscribe?username=${username}`,
+                `https://onlybackend-production.up.railway.app/subscribe?username=${username}`,
                 {},
                 {
                     headers: {
@@ -136,7 +136,7 @@ export default function SearchPage() {
             console.log('Unsubscribing to:', username);
 
             await axios.delete(
-                `http://localhost:8080/unsubscribe?username=${username}`,
+                `https://onlybackend-production.up.railway.app/unsubscribe?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
