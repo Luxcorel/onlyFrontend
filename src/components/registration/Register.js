@@ -40,7 +40,7 @@ export default function Register() {
             })
             .catch(error => {
                 window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
-                setError(error.response.data.error);
+                //setError(error.response.data.error);
             });
     }
 
