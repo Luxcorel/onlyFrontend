@@ -25,7 +25,7 @@ export default function Register() {
         event.preventDefault();
         setError(null);
 
-        axios.post('https://onlybackend-production.up.railway.app/register/', {
+        axios.post('https://onlybackend-production.up.railway.app/register', {
             email: email,
             username: username,
             password: password
@@ -39,6 +39,7 @@ export default function Register() {
                 window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
             })
             .catch(error => {
+                window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
                 setError(error.response.data.error);
             });
     }
