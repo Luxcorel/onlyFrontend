@@ -31,8 +31,13 @@ export default function Login() {
                     withCredentials: true,
                 }
             )
-            .then(() => {
-                window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
+            .then((response) => {
+                if (response.status === 200) {
+                    window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
+                }
+                else {
+                    throw new Error("Wrong creds");
+                }
             })
             .catch((error) => {
                 setError(error.response.data.error);
