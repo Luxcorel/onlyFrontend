@@ -32,7 +32,7 @@ export default function Login() {
                 }
             )
             .then(() => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
                 }
             })
