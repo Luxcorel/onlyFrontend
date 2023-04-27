@@ -31,7 +31,7 @@ export default function Login() {
                     withCredentials: true,
                 }
             )
-            .then(() => {
+            .then((response) => {
                 if (response.status === 200) {
                     window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
                 }
