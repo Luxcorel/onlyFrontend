@@ -53,7 +53,7 @@ export default function Login() {
                 </div>
                 <div className="login--inputs">
                     <input
-                        type="text"
+                        type="email"
                         id="username"
                         name="username"
                         value={username}
