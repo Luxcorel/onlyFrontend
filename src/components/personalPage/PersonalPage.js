@@ -1,31 +1,95 @@
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import Avatar from "../../assets/images/avatar.png"
-import axios from "axios";
+import axios, {postForm} from "axios";
 import {useParams} from "react-router-dom";
 import NavBar from "../navBar/NavBar";
 
 export default function PersonalPage() {
 
+    const [reviews, setReviews] = useState()
     const {username} = useParams();
     const [userData, setUserData] = React.useState();
     const [error, setError] = React.useState(null)
+    const [personalName, setPersonalName] = useState()
+    const [reviewText, setReviewText] = useState()
 
-    document.title =`${username}`
+    const [isPosted, setIsPosted] = useState(false);
+
+    document.title = `${username}`
 
     useEffect(() => {
-
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://onlybackend-production.up.railway.app/fetch-about-me-with-sub-info?username=${username}`,
+                const responseReviews = await axios.get(`https://onlybackend-production.up.railway.app/reviews/fetch-all?targetUsername=pumpndump`,
                     {
                         headers: {
                             'Content-type': 'application/json'
                         },
                         withCredentials: true,
-                    });
+                    }).then(responseReviews => {
+                    console.log(responseReviews.data)
+                    setReviews(responseReviews.data)
 
-                console.log('API response:', response.data);
-                setUserData(response.data);
+                });
+
+                const responseIsPosted = await axios.get(`https://onlybackend-production.up.railway.app/reviews/get-my-review?targetUsername=${username}`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then(responseIsPosted => {
+                    if (responseIsPosted.status == 200) {
+                        setIsPosted(true)
+                    }
+                });
+
+
+            } catch (error) {
+                if (error.response && error.response.status === 500) {
+                    setIsPosted(false)
+                    console.error('Bad Request:', error);
+                }
+
+                if (error.response && error.response.status === 400) {
+                    // Handle 400 error
+                    console.error('Bad Request:', error);
+                    setError("User not found")
+                }
+            }
+        }
+        fetchData()
+    }, [username])
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                const responseTargetUser = await axios.get(`https://onlybackend-production.up.railway.app/fetch-about-me-with-sub-info?username=${username}`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then(responseTargetUser => {
+                    console.log(responseTargetUser.data)
+                    setUserData(responseTargetUser.data);
+                });
+
+                const responseUser = await axios.get(`https://onlybackend-production.up.railway.app/principal-username`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then(responseUser => {
+
+                    console.log('You are:', responseUser.data);
+                    setPersonalName(responseUser.data)
+
+                });
+
+
             } catch (error) {
                 if (error.response && error.response.status === 400) {
                     // Handle 400 error
@@ -39,7 +103,7 @@ export default function PersonalPage() {
         };
 
         fetchData();
-    }, [username]);
+    }, []);
 
     async function handleClick() {
         if (userData.subscribed) {
@@ -112,6 +176,57 @@ export default function PersonalPage() {
     }
 
 
+    async function posted() {
+        setIsPosted(true)
+        await post()
+    }
+
+    const post = async () => {
+
+        try {
+            console.log('Posting review to:', username);
+
+            await axios.put(
+                `https://onlybackend-production.up.railway.app/reviews/post`,
+                {targetUsername: username, reviewText: reviewText},
+                {
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    withCredentials: true,
+                }
+            );
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    function makeReview(e) {
+        setReviewText(e.target.value)
+    }
+
+    const showReviews = reviews.map((review, index) => {
+        return (
+
+            <div key={index}>
+                <div className="personalPage-review-card-header">
+                    <img src={Avatar} style={{
+                        width: 50,
+                        height: 50
+                    }}/>
+                    <h3>{review.author}</h3>
+                </div>
+                <div className="personalPage-review-card-post-area">
+                    <p>{review.reviewText}</p>
+                </div>
+            </div>
+        )
+    })
+
+    const revertIsPosted = () => {
+        setIsPosted(false)
+    }
+
     return (
         <div>
             {error ? <p>{error}</p> : (
@@ -129,6 +244,44 @@ export default function PersonalPage() {
                         <div className="mypage--bio--container">
                             <p>{userData.aboutMe}</p>
                             <button onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>
+                        </div>
+                    </div>
+                    <div className="personalPage-review-section">
+                        <div className="personalPage-review-card">
+                            {isPosted ?
+                                (
+                                    <div>
+                                        {showReviews}
+                                        <button onClick={revertIsPosted}>edit</button>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <div>
+                                        <div className="personalPage-review-card-header">
+
+                                            <img src={Avatar} style={{
+                                                width: 50,
+                                                height: 50
+                                            }}/>
+                                            <h3>{personalName}</h3>
+                                        </div>
+                                        <div className="personalPage-review-card-post-area">
+                                            <textarea
+                                                value={reviewText}
+                                                onChange={makeReview}
+                                                rows={5}
+                                                cols={30}
+                                                maxLength={700}
+                                                className=""
+                                            />
+                                            <button onClick={posted}>Post</button>
+                                        </div>
+                                        {showReviews}
+                                    </div>
+
+                                )
+                            }
                         </div>
                     </div>
                 </div>

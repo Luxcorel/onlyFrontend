@@ -3,7 +3,7 @@
     --dashboard-module-border-radius: 7px;
 
     --main-color: #ffffff;
-    --light-color: #ffffff;
+    --light-color: rgb(255, 255, 255);
     --dark-color: #306b43;
     --header-color: #DDDDDD;
     --backgrond-color: #3e3e41;
@@ -40,7 +40,7 @@ Chart
 Navbar
  */
 
-.navbar--logout{
+.navbar--logout {
     width: 50px;
     height: 50px;
     margin-top: 65px;
@@ -55,12 +55,31 @@ Navbar
     width: 60px;
     margin: 15px 0px;
     border: none;
+    fill: #9569b9;
 }
 
-.navbar--icon{
-    width: 50px;
-    height: 50px;
-    margin-top: 65px;
+.navbar--icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    margin: 35px 0;
+    padding: 10px;
+    border-radius: 15px;
+    transition: all 0.1s ease-in-out;
+}
+
+.navbar--icon > box-icon {
+    width: 30px;
+    height: 30px;
+    fill: #565656;
+}
+
+.navbar--icon:hover {
+    background-color: rgba(180, 180, 180, 0.35);
+    box-shadow: 1px 1px 10px #afafaf;
+    transition: all 0.1s ease-in-out;
 }
 
 .navbar--img--line {
@@ -68,15 +87,25 @@ Navbar
     padding: 10px;
 }
 
+.navbar--img--line > box-icon {
+    height: 30px;
+    width: 30px;
+    margin: 35px 0px;
+    border: none;
+    fill: #565656;
+}
+
 .navbar-container {
     position: fixed;
-    width: var(--container-width);
+    width: 5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 94%;
-    margin-top: 25px;
-    margin-left: 15px;
+
+    top: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+
     border-radius: 15px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(10px);
@@ -86,37 +115,15 @@ Navbar
 /**
 Studio
  */
-
-.studio-message-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    transition: opacity 0.3s ease-in-out;
-    opacity: 0;
-}
-
-.studio-message-container.show {
-    opacity: 1;
-}
-
-.studio-error-message {
-    color: red;
-}
-
-.studio-success-message {
-    color: green;
-}
-
+/*
 .studio--navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0px 100px;
     box-shadow: 0px 0px 10px #e0e0e0;
+    background-color: #ffffff;
 }
-
 .studio--navbar > h1 {
     background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
     background-size: 400% 400%;
@@ -150,10 +157,15 @@ Studio
     background-clip: text;
     color: transparent;
 }
+*/
+
 
 .studio--container {
     display: flex;
     height: 100%;
+    width: 92%;
+    margin-left: auto;
+    margin-right: 1rem;
 }
 
 /**
@@ -165,31 +177,72 @@ Studio chart
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 680px;
+
+    height: 95vh;
     width: 50%;
-    margin: 10px;
+    margin: 1.5% 1% 1% 1%;
+
     border-radius: 10px;
+    background-color: rgb(255, 255, 255);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.studio--chart > button {
-    margin-top: 100px;
-    width: 70px;
-    height: 30px;
-    font-size: 25px;
-    border: none;
-    background-color: #b4b4b4;
-    background-clip: text;
-    color: transparent;
-    cursor: pointer;
+.studio-message-container {
+    position: fixed;
+    top: 20rem;
+    left: 35rem;
+    z-index: 3;
+
+    transform: scale(0);
+    transition: transform 0.3s ease-in-out;
+
+    border-radius: 30px;
+    padding: 1%;
+    width: 20rem;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    animation: gradient 3s ease infinite;
+
+    font-weight: bold;
+    font-size: 1rem;
 }
 
-.studio--chart > button:hover {
-    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
-    background-size: 400px 400px;
-    animation: gradient 5s ease infinite;
-    background-clip: text;
-    color: transparent;
+.studio-message-container.show {
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.studio-message-container.hide {
+    transform: scale(0);
+}
+
+.studio-error-message {
+    color: #ffffff;
+}
+
+.studio-success-message {
+    position: absolute;
+    color: #ffffff;
+
+    border-radius: 30px;
+    width: 22em;
+    height: 10em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    animation: gradient 3s ease infinite;
+
+    font-weight: bold;
+    font-size: 3em;
 }
 
 /**
@@ -201,11 +254,10 @@ Studio toolbar
     flex-direction: column;
     justify-content: start;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 50%;
-    margin: 10px;
-    padding: 15px;
 
+    height: 95vh;
+    width: 50%;
+    margin: 1.5% 1% 1% 1%;
 }
 
 .studio--toolbar--heading {
@@ -213,11 +265,17 @@ Studio toolbar
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+
+    border-radius: 13px;
+    box-shadow: 0px 0px 5px gray;
+    margin-bottom: 1em;
+    background-color: #ffffff;
 }
 
 .studio--toolbar--input > input {
     width: 250px;
     border: none;
+    border-bottom: 2px dashed #b4b4b4;
     margin: 10px;
     font-size: 25px;
     font-weight: bold;
@@ -236,25 +294,72 @@ Studio toolbar
 }
 
 .studio--toolbar--selects > select, .studio--toolbar--standards--selects > select, .studio--toolbar--standards--selects > select {
+    text-align-last: center;
+    padding: 0.5em 0.5em;
     margin: 20px 20px;
     border: none;
-    background-color: #ffff;
+    appearance: none;
     outline: none;
+    border-radius: 30em;
     font-weight: bold;
     font-size: 15px;
-    appearance: none;
-    text-align: center;
+    width: 10em;
+    background-color: #e8e8e8;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 3px 3px 3px #c2c2c2;
+}
+
+.studio--toolbar--selects > select:hover, .studio--toolbar--standards--selects > select:hover, .studio--toolbar--standards--selects > select:hover {
+    background-color: #d3d3d3;
+
 }
 
 .studio--toolbar--selects {
-    border-bottom: 1px solid #cbcbcb;
     display: flex;
+}
+
+.studio--category--axis--inputs {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    border-radius: 10px;
+    box-shadow: 0 0 5px gray;
+    margin-bottom: 1em;
+    background-color: #ffffff;
+
+}
+
+.studio--category--axis--inputs > input {
+    border: none;
+    margin: 1em;
+    padding: 0.5em 0.5em;
+
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+
+    outline: none;
+    caret-color: #cbcbcb;
+    border-radius: 30em;
+    width: 15em;
+
+    background-color: #e8e8e8;
+    transition: all 0.2s ease-in-out;
+    box-shadow: inset 3px 3px 3px #c2c2c2;
+}
+
+.studio--category--axis--inputs > input::placeholder {
+    color: #888888;
 }
 
 .studio--toolbar--columns {
     display: flex;
     justify-content: space-around;
-    height: 530px;
+    height: 31em;
+    background-color: #cbcbcb;
+    border-radius: 1em 1em 0 0;
+    box-shadow: 0 0 4px #676767;
 }
 
 .studio--category-container {
@@ -262,100 +367,126 @@ Studio toolbar
     flex-direction: column;
     align-items: center;
     width: 50%;
-    height: 530px;
+    height: 31em;
     border-right: 1px solid #cbcbcb;
+}
+
+.studio--category-container > h2 {
+    color: #ffffff;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    font-size: 2.1em;
+}
+
+.studio--category-count-btn {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1em;
+    width: 19em;
+    border-bottom: 1px solid gray;
+}
+
+.studio--category-count-btn > button {
+    margin: 0 1em;
+    width: 7em;
+    height: 2em;
+
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    border: none;
+
+    background-color: #dedede;
+    font-size: 15px;
+
+    padding: 5px 10px;
+    box-shadow: 2px 2px 4px #9a9a9a;
+}
+
+.studio--category-count-btn > button:hover {
+    transition: all 0.3s ease-in-out;
+    background-color: #e7e7e7;
+}
+
+
+.studio--category-input-fields::-webkit-scrollbar {
+    display: none;
+}
+
+.studio--category-input-fields {
+    overflow: auto;
+    height: 24em;
+    width: 15em;
+    padding-top: 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.studio--category-input-fields > input {
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+
+
+    height: 2em;
+
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    border-radius: 10px;
+
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+    caret-color: #cbcbcb;
+
+    background-color: #e1e1e1;
+    box-shadow: inset 3px 3px 3px #a6a6a6;
 }
 
 .studio--dataset-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
-    height: 530px;
+
+    width: 45%;
+    height: 29em;
+    margin-top: 1em;
+    margin-right: 1em;
+
+    background-color: #ffffff;
+    border-radius: 1em;
 }
 
-.studio--category-y-axis-input > input {
-    border: none;
-    border-bottom: 1px solid #cbcbcb;
-    margin: 10px;
-    font-size: 15px;
-    font-weight: bold;
-    text-align: center;
-    outline: none;
-    caret-color: #cbcbcb;
-}
-
-.studio--dataset--buttons {
-    display: flex;
-}
-
-.studio--category-count-btn > button {
-    margin: 10px 40px;
-    width: 75px;
-    height: 35px;
-
-    border: 1px dashed #cbcbcb;
-    transition: all 0.3s ease-in-out;
-    border-radius: 20px;
-    background-color: #ffff;
-
-    font-size: 15px;
-}
-
-.studio--category-count-btn > button:hover {
-    border: 1px dotted #61dafb;
-    transition: all 0.3s ease-in-out;
-}
-
-.studio--category-input-fields {
-    height: 530px;
-    overflow: scroll;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-}
-
-.studio--category-input-fields::-webkit-scrollbar {
-    display: none;
-}
-
-.studio--category-input-fields > input {
-    display: flex;
-    flex-direction: column;
-    border: none;
-    border-bottom: 1px solid #cbcbcb;
-    margin-top: 35px;
-    font-size: 15px;
-    text-align: center;
-    outline: none;
-    caret-color: #cbcbcb;
-}
-
-.studio--add-dataset-btn > button {
-    margin: 10px 40px;
-    width: 75px;
-    height: 45px;
-
-    border: 1px dashed #cbcbcb;
-    transition: all 0.3s ease-in-out;
-    border-radius: 20px;
-    background-color: #ffff;
-
-    font-size: 15px;
-}
-
-.studio--add-dataset-btn > button:hover {
-    border: 1px dotted #61dafb;
-    transition: all 0.3s ease-in-out;
-}
 
 .studio--dataset-tabs-btn {
-    margin: 10px 0px;
-    width: 300px;
-    height: 40px;
-    border-bottom: 1px solid #b4b4b4;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    margin: 0.5em 0;
+    width: 16em;
+    height: 3em;
     overflow-x: auto;
     white-space: nowrap;
+
+    border-radius: 3em;
+    box-shadow: inset 5px 2px 10px #ffffff;
+    background-size: 100%;
+    border: none;
+    background-clip: content-box;
+
+
+    mask-image: linear-gradient(
+            100grad,
+            transparent,
+            white,
+            white,
+            white,
+            white,
+            white,
+            transparent
+    );
+
 }
 
 .studio--dataset-tabs-btn::-webkit-scrollbar {
@@ -364,44 +495,51 @@ Studio toolbar
 
 .studio--dataset-tabs-btn > button {
     font-size: 15px;
-    margin: 0px 10px;
-    border: none;
-    background-color: #ffff;
-    border-bottom: 1px solid #cbcbcb;
-}
-
-.studio--dataset-tab-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.studio--remove-dataset-btn {
-    display: flex;
-    justify-content: center;
-}
-
-.studio--dataset--value--container {
-    overflow: auto;
-}
-
-.studio--remove-dataset-btn > button {
-    margin: 15px 40px;
-    width: 85px;
-    height: 45px;
-
-    border: 1px dashed #cbcbcb;
+    margin: 0 10px;
     transition: all 0.3s ease-in-out;
     border-radius: 20px;
-    background-color: #ffff;
+    border: none;
 
-    font-size: 15px;
+    background-color: #dedede;
+
+    padding: 5px 10px;
+    box-shadow: 2px 2px 4px #9a9a9a;
 }
 
-.studio--remove-dataset-btn > button:hover {
-    border: 1px dotted #61dafb;
+.studio--dataset-tabs-btn > button:hover {
     transition: all 0.3s ease-in-out;
+    background-color: #c9c9c9;
+}
+
+.studio--dataset--buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 17em;
+    height: 3.4em;
+    padding-bottom: 0.1em;
+    border-bottom: 1px solid gray;
+}
+
+.studio--dataset--buttons > button {
+    margin: 0 0.5em;
+    width: 9em;
+    height: 2em;
+
+    transition: all 0.3s ease-in-out;
+    border-radius: 20px;
+    border: none;
+
+    background-color: #eeeeee;
+    font-size: 13px;
+
+    padding: 0 0.5em;
+    box-shadow: 2px 2px 4px #9a9a9a;
+}
+
+.studio--add-dataset-btn > button:hover {
+    transition: all 0.3s ease-in-out;
+    background-color: #cbcbcb;
 }
 
 .studio--dataset-input-name {
@@ -409,35 +547,98 @@ Studio toolbar
     justify-content: center
 }
 
+.studio--dataset-tab-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 21.4em;
+    width: 15em;
+}
+
 .studio--dataset-input-name > input {
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+    width: 16em;
+
+    height: 2em;
+
     border: none;
-    border-bottom: 1px dashed #cbcbcb;
-    margin: 15px;
-    font-size: 15px;
+    border-bottom: 1px solid #cbcbcb;
+    border-radius: 10px;
+
     font-weight: bold;
+    font-size: 15px;
     text-align: center;
     outline: none;
     caret-color: #cbcbcb;
+
+    background-color: #c2c2c2;
+    box-shadow: inset 3px 3px 3px #8d8d8d;
+}
+
+.studio--dataset-input-name > input::placeholder {
+    color: #e7e7e7;
 }
 
 .dataset-input-fields {
+    overflow: auto;
+    height: 17.4em;
+    width: 15em;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
 }
 
 .dataset-input-fields > input {
     display: flex;
     flex-direction: column;
-    margin: 10px;
+    margin-bottom: 2em;
+
+    height: 2em;
+
     border: none;
     border-bottom: 1px solid #cbcbcb;
-    font-size: 13px;
+    border-radius: 10px;
+
+    font-size: 15px;
     text-align: center;
     outline: none;
     caret-color: #cbcbcb;
+
+    background-color: #e1e1e1;
+    box-shadow: inset 3px 3px 3px #a6a6a6;
 }
 
+.studio--submit {
+    display: flex;
+    justify-content: center;
+    height: 4em;
+    border: none;
+    border-radius: 0 0 0.5em 0.5em;
+    background-color: white;
+    box-shadow: 0 2px 4px #7c7c7c;
+}
+
+.studio--submit > button {
+    border: none;
+    font-size: 1.5em;
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    background-clip: text;
+    animation: gradient 15s ease infinite;
+    color: transparent;
+    width: 100%;
+    border-radius: 0 0 0.3em 0.3em;
+}
+
+.studio--submit > button:hover {
+    color: white;
+    background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+
+}
 
 /**
 Register
@@ -554,7 +755,7 @@ Login
     box-shadow: 5px 5px 10px #bebebe;
 }
 
-.login--titel > h1{
+.login--titel > h1 {
     background: linear-gradient(45deg, #3bb273, #E1BC29, #e15554, #9569b9, #4d9de0);
     background-size: 400% 400%;
     background-clip: text;
@@ -884,11 +1085,11 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     margin: 25px;
     margin-left: 50px;
     margin-right: 30px;
-    box-shadow:  0px 0px 10px rgba(0, 0, 0, 0.38);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.38);
     border-radius: 20px;
 }
 
-.dashboard-button-underlay{
+.dashboard-button-underlay {
     position: fixed;
     height: 115px;
     margin-right: 30px;
@@ -923,7 +1124,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     border-bottom: 1px solid #cbcbcb;
 }
 
-.dashboard-stock-tab-buttons > button:hover{
+.dashboard-stock-tab-buttons > button:hover {
     border-bottom: 1px solid #61dafb
 }
 
@@ -959,7 +1160,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     border-bottom: 1px solid #cbcbcb;
 }
 
-.dashboard-category-tab-buttons > button:hover{
+.dashboard-category-tab-buttons > button:hover {
     border-bottom: 1px solid #61dafb;
     transition: all 0.3s ease-in-out;
 }
@@ -982,7 +1183,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     display: block;
 }
 
-.dashboard-category-tab-content{
+.dashboard-category-tab-content {
     align-self: center;
     overflow-y: auto;
     margin-top: 125px;
@@ -991,12 +1192,12 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
 
 }
 
-.dashboard-stock-tab-container{
+.dashboard-stock-tab-container {
     width: 100%;
     overflow: scroll;
 }
 
-.dashboard-category-tab-container{
+.dashboard-category-tab-container {
     border: 0px solid #232323;
 }
 
@@ -1013,7 +1214,26 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
-.dashboard-profile-button{
+.dashboard-empty-module {
+    padding: 0px;
+    display: inline-grid;
+    margin: 15px;
+    background-color: var(--light-color);
+    border-radius: var(--dashboard-module-border-radius);
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 72px;
+    color: black;
+    text-decoration: none;
+    border: none;
+}
+
+.dashboard-profile-button {
     position: absolute;
     right: 17px;
     top: 17px;
@@ -1030,7 +1250,7 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     animation: gradient 25s ease infinite;
 }
 
-.dashboard-is-loading{
+.dashboard-is-loading {
     color: var(--dark-color);
     font-family: Tahoma;
     font-size: 24px;
@@ -1040,7 +1260,6 @@ behöver du ändra bakgrundsfärgen så finns den nu under index.css .body */
     transform: translate(-50%, -50%);
 
 }
-
 
 
 /**
@@ -1118,6 +1337,7 @@ Profile page
     height: 80px;
     font-size: 15px;
 }
+
 /**
 Search Page
  */
@@ -1205,7 +1425,7 @@ Search Page
     color: #343a40;
 }
 
-.searchpage--profile--subscribtion > button{
+.searchpage--profile--subscribtion > button {
     border: none;
     border-radius: 30px;
     background-color: rgba(217, 217, 217, 0.34);
@@ -1215,11 +1435,11 @@ Search Page
     box-shadow: 2px 2px 4px #d2d2d2;
 }
 
-.searchpage--profile--subscribtion > button:hover{
+.searchpage--profile--subscribtion > button:hover {
     cursor: pointer;
 }
 
-.searchpage--profile--image{
+.searchpage--profile--image {
     width: 80px;
 }
 
@@ -1237,15 +1457,15 @@ Feed
  */
 
 
-.feed--charts--container{
+.feed--charts--container {
 }
 
-.feed--charts{
+.feed--charts {
     width: 600px;
     margin: 0 auto;
 }
 
-.feed--new--charts{
+.feed--new--charts {
     margin: 20px;
     padding: 10px;
     border-radius: 15px;
@@ -1256,7 +1476,7 @@ Feed
     align-items: center;
 }
 
-.subBar{
+.subBar {
     position: fixed;
     left: 75%;
     top: 5%;
@@ -1270,6 +1490,51 @@ Feed
     height: 86%;
 }
 
-.subBar > h3{
+.subBar > h3 {
     color: #919191;
+}
+
+.personalPage-review-section {
+    display: flex;
+    background-color: #61dafb;
+    position: absolute;
+    width: 90%;
+    height: 33%;
+    top: 65%;
+    left: 8%;
+    z-index: -1;
+    overflow-x: auto;
+}
+
+.personalPage-review-card {
+    display: flex;
+    flex-direction: column;
+    margin: 1% 1%;
+    width: 30%;
+    height: 90%;
+    top: 5%;
+    background-color: red;
+}
+
+.personalPage-review-card-header {
+    display: flex;
+    padding: 0 2%;
+    align-items: center;
+    background-color: #3bb273;
+}
+
+.personalPage-review-card-header > h3 {
+    margin-left: 5%;
+}
+
+.personalPage-review-card-post-area{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    background-color: #4d9de0;
+}
+.personalPage-review-card-post-area > textarea, p{
+    font-size: 16px;
 }

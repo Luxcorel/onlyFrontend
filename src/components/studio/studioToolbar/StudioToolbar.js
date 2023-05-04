@@ -2,93 +2,70 @@ import React, {useState} from 'react';
 import StandardTable from "./StandardTable"
 import PieTable from "./PieTable"
 import StandardToolbar from "./StandardToolbar"
+import {useLocation} from "react-router-dom";
+import axios from "axios";
 
 
 
 export default function StudioToolbar(props) {
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const editModule = searchParams.get("editModule") || false;
+    const moduleIndex = searchParams.get("moduleIndex") || 0;
+
     const [categories, setCategories] = useState(props.categories)
     const [tableType, setTableType] = useState("column")
     const [tableKey, setTableKey] = useState(1)
+    const [submitButton, setSubmitButton] = useState(
+        searchParams.get("editModule") === "true" ? "Update" : "Submit"
+    )
     let table
 
-    function handleCategoryCountIncrease(count){
-        props.handleCategoryCountIncrease(count);
+    function deleteChart(){
+        axios.delete()
     }
-
-    function handleCategoryCountDecrease(count){
-        props.handleCategoryCountDecrease(count);
-    }
-
-    function handleDatasetAdd() {
-        props.handleDatasetAdd();
-    }
-
-    function handleDatasetRemove(indexToRemove) {
-        props.handleDatasetRemove(indexToRemove);
-    }
-
-    function handleDatasetDataChange(index, dataIndex, value){
-        props.handleDatasetDataChange(index, dataIndex, value);
-    }
-
-    function handleDatasetNameChange(index, name){
-        props.handleDatasetNameChange(index, name);
-    }
-
-    function handleCategoryNameChange(index, name){
-        props.handleCategoryNameChange(index, name)
-    }
-
-    function handleChartNameChange(name){
-        props.handleChartNameChange(name)
-    }
-
-    function handleYAxisNameChange(name){
-        props.handleYAxisNameChange(name)
-    }
-
-    function handleChartTypeChange(type){
-        setTableType(type)
-        props.handleChartTypeChange(type)
-    }
-
-    function handleCategoryIdChange(id){
-        props.handleCategoryIdChange(id)
-    }
-
 
     switch (tableType) {
         case "pie":
             table = <PieTable
             />;
-            props.putChartToInitState();
             break;
         default:
 
             table = <StandardTable
-                handleCategoryCountIncrease={handleCategoryCountIncrease}
-                handleCategoryCountDecrease={handleCategoryCountDecrease}
-                handleDatasetAdd={handleDatasetAdd}
-                handleDatasetRemove={handleDatasetRemove}
-                handleDatasetDataChange={handleDatasetDataChange}
-                handleDatasetNameChange={handleDatasetNameChange}
-                handleCategoryNameChange={handleCategoryNameChange}
-                handleYAxisNameChange={handleYAxisNameChange}
+                setStudioChart={props.setStudioChart}
+                studioChart={props.studioChart}
+                colorscheme={props.colorscheme}
             />;
-            props.putChartToInitState();
             break;
         }
     return (
         <>
+            {/* --STANDARD TOOLBAR-- */}
             <StandardToolbar
-                handleChartNameChange={handleChartNameChange}
-                handleChartTypeChange={handleChartTypeChange}
-                handleCategoryIdChange={handleCategoryIdChange}
+                setCategoryId={props.setCategoryId}
+                setStudioChart={props.setStudioChart}
+                studioChart={props.studioChart}
+                setTableType={setTableType}
+                setSubmitButton={setSubmitButton}
             />
+            {/* --TABLE TOOLBAR-- */}
             <div className="table">
                 {table}
             </div>
+            {/* --SUBMIT BUTTON-- */}
+            <div className="studio--submit">
+                <button onClick={() => props.createChart()}> {submitButton}</button>
+                {editModule && (
+                    <button onClick={() => deleteChart()}>
+                        Delete
+                    </button>
+                )}
+            </div>
+
         </>
+
     )
 }
 

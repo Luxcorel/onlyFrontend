@@ -1,3 +1,16 @@
+## Project setup
+
+1. Download and install Node.js from [nodejs.org](https://nodejs.org).
+
+2. Open a terminal or command prompt and navigate to the root of the project folder.
+
+3. Install the dependencies by typing:
+### `npm install`
+
+4. Start the development server by typing(should open http://localhost:3000 in the default browser):
+### `npm start`
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

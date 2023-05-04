@@ -25,6 +25,7 @@ function App() {
             </Route>
             <Route path="searchpage" element={<SearchPage/>}></Route>
             <Route path="searchpage/:username" element={<PersonalPage/>}></Route>
+            <Route path=":username" element={<PersonalPage/>}></Route>
             <Route path="mypage" element={<MyPage/>}></Route>
             <Route path="usernotfound" element={<UserNotFound/>}></Route>
             <Route path="register" element={<Register/>}></Route>

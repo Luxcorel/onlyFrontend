@@ -1,5 +1,6 @@
 import React from "react"
 import Avatar from "../../assets/images/avatar.png";
+import {Link} from "react-router-dom";
 
 export default function SubscriptionProfile(props) {
 
@@ -14,8 +15,11 @@ export default function SubscriptionProfile(props) {
             marginRight: "20px",
             marginBottom: "20px"
         }}>
-            <h3>{props.username}</h3>
+            <Link to={`/${props.username}`}>
+                <h3>{props.username}</h3>
+            </Link>
             <img src={Avatar} width="50px"/>
+            <p>{props.relatedStock}</p>
         </div>
     )
 }

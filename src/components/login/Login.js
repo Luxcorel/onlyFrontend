@@ -22,7 +22,7 @@ export default function Login() {
 
         axios
             .post(
-                'https://onlybackend-production.up.railway.app/plz',
+                'https://onlybackend-production.up.railway.app//plz',
                 `username=${username}&password=${password}`,
                 {
                     headers: {
@@ -31,13 +31,8 @@ export default function Login() {
                     withCredentials: true,
                 }
             )
-            .then((response) => {
-                if (response.status === 200) {
-                    window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
-                }
-                else {
-                    throw new Error("Wrong creds");
-                }
+            .then(() => {
+                window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
             })
             .catch((error) => {
                 setError(error.response.data.error);

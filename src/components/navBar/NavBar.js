@@ -1,9 +1,10 @@
 import React from "react"
 import {Link} from "react-router-dom";
 import homeIcon from "../../assets/icons/home.png"
-import studioIcon from "../../assets/icons/studio.png"
+import Profile from "../../assets/icons/profile-user-svgrepo-com.svg"
 import Avatar from "../../assets/images/avatar.png";
 import axios from "axios";
+import 'boxicons'
 
 
 /*
@@ -14,7 +15,8 @@ async function logout() {
     try {
         await axios.post(`https://onlybackend-production.up.railway.app/logout`,
             {},
-            { headers: {
+            {
+                headers: {
                     'Content-type': 'application/json'
                 },
                 withCredentials: true,
@@ -24,7 +26,7 @@ async function logout() {
         console.log(error)
     }
 
-    window.location.replace("https://onlyfrontend-production.up.railway.app");
+    window.location.replace("https://onlyfrontend-production.up.railway.app/");
 }
 
 export default function NavBar() {
@@ -32,23 +34,35 @@ export default function NavBar() {
         <div className="navbar-container">
             <Link to="/mypage">
                 <span className="navbar--img--line">
-                    <img src={Avatar} alt="My page" title="My page" className="navbar--img"/>
+                        <box-icon name='user'/>
                 </span>
             </Link>
-            <Link to="/Dashboard">
-                <img className="navbar--icon" src={homeIcon} alt="Home" title="Home"/>
-            </Link>
-            <Link to="/Studio">
-                <img className="navbar--icon" src={studioIcon} alt="Studio" title="Studio"/>
+            <Link to="/feed">
+                <div className="navbar--icon">
+                    <box-icon name='home'></box-icon>
+                </div>
+
             </Link>
             <Link to="/searchpage">
-                <img className="navbar--icon" src={homeIcon} alt="Search page"/>
+                <div className="navbar--icon">
+                    <box-icon name='search'></box-icon>
+                </div>
             </Link>
-            <Link to="/feed">
-                <img className="navbar--icon" src={homeIcon} alt="Feed"/>
+            <Link to="/Dashboard">
+                <div className="navbar--icon">
+                    <box-icon name='news'></box-icon>
+                </div>
             </Link>
+            <Link to="/Studio">
+                <div className="navbar--icon">
+                    <box-icon name='add-to-queue'></box-icon>
+                </div>
+            </Link>
+            <div className="navbar--icon">
+                <box-icon name='exit' onClick={logout}></box-icon>
+            </div>
 
-            <button className="navbar--logout" onClick={logout}/>
+
         </div>
     )
 }
