@@ -1338,6 +1338,54 @@ Profile page
     font-size: 15px;
 }
 
+.personalPage-review-section {
+    display: flex;
+    background-color: #61dafb;
+    position: absolute;
+    width: 90%;
+    height: 33%;
+    top: 65%;
+    left: 8%;
+    z-index: -1;
+    overflow-x: auto;
+}
+
+
+.personalPage-review-card {
+    display: flex;
+    flex-direction: column;
+    margin: 1% 1%;
+    width: 30%;
+    height: 90%;
+    top: 5%;
+    background-color: red;
+}
+
+.personalPage-review-card-header {
+    display: flex;
+    padding: 0 2%;
+    align-items: center;
+    background-color: #3bb273;
+}
+
+.personalPage-review-card-header > h3 {
+    margin-left: 5%;
+}
+
+.personalPage-review-card-post-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 75%;
+    font-size: 15px;
+    background-color: #4d9de0;
+}
+
+.personalPage-review-card-post-area > textarea, p {
+    font-size: 16px;
+}
+
 /**
 Search Page
  */
@@ -1494,47 +1542,69 @@ Feed
     color: #919191;
 }
 
-.personalPage-review-section {
+.layout {
     display: flex;
-    background-color: #61dafb;
+    justify-content: start;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
     position: absolute;
-    width: 90%;
-    height: 33%;
-    top: 65%;
-    left: 8%;
-    z-index: -1;
-    overflow-x: auto;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
-.personalPage-review-card {
-    display: flex;
-    flex-direction: column;
-    margin: 1% 1%;
-    width: 30%;
-    height: 90%;
-    top: 5%;
-    background-color: red;
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
-.personalPage-review-card-header {
-    display: flex;
-    padding: 0 2%;
-    align-items: center;
-    background-color: #3bb273;
+input:checked + .slider {
+    background-color: #2196F3;
 }
 
-.personalPage-review-card-header > h3 {
-    margin-left: 5%;
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
 }
 
-.personalPage-review-card-post-area{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    background-color: #4d9de0;
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
-.personalPage-review-card-post-area > textarea, p{
-    font-size: 16px;
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }

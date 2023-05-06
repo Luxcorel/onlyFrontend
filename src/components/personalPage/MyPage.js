@@ -21,7 +21,7 @@ export default function PersonalPage() {
         const fetchData = async () => {
             try {
 
-                //await axios.get("https://onlybackend-production.up.railway.app/test-login")
+                //await axios.get("http://localhost:8080/test-login")
 
                 const response1 = await axios.get(`https://onlybackend-production.up.railway.app/principal-username`,
                     {
@@ -29,9 +29,11 @@ export default function PersonalPage() {
                             'Content-type': 'application/json'
                         },
                         withCredentials: true,
-                    });
+                    }).then();
+
 
                 setUsername(response1.data);
+                console.log(username)
 
                 const response2 = await axios.get(`https://onlybackend-production.up.railway.app/fetch-about-me?username=${response1.data}`,
                     {
@@ -42,7 +44,10 @@ export default function PersonalPage() {
                     });
 
                 console.log('API response:', response2.data);
+                console.log(username)
                 setUserData(response2.data);
+
+
             } catch (error) {
                 console.error('Error fetching data:', error);
                 navigate("/Login")
@@ -55,17 +60,17 @@ export default function PersonalPage() {
                     },
                     withCredentials: true,
                 }).then(responseReviews => {
-                    if(responseReviews.data != null){
-                        console.log(responseReviews.data)
-                        setReviews(responseReviews.data)
-                        setIsVisible(true)
-                    }
+                if (responseReviews.data != null) {
+                    console.log(responseReviews.data)
+                    setReviews(responseReviews.data)
+                    setIsVisible(true)
+                }
             });
         };
 
 
         fetchData();
-    }, [navigate]);
+    }, [username]);
 
 
     function handleTextAreaChange(e) {
@@ -99,10 +104,11 @@ export default function PersonalPage() {
         }
     }
 
-    const showReviews = reviews.map((review, index) => {
-        return (
-
-            <div key={index}>
+    const showReviews = []
+    for (let i = 0; i < reviews.length; i++) {
+        const review = reviews[i]
+        showReviews.push(
+            <div key={review.id} className="personalPage-review-card">
                 <div className="personalPage-review-card-header">
                     <img src={Avatar} style={{
                         width: 50,
@@ -115,7 +121,7 @@ export default function PersonalPage() {
                 </div>
             </div>
         )
-    })
+    }
 
     return (
         <div className="mypage">
@@ -146,7 +152,6 @@ export default function PersonalPage() {
                 </div>
             </div>
             <div className="personalPage-review-section">
-
                 {isVisible && showReviews}
             </div>
         </div>

@@ -11,18 +11,13 @@ export default function Studio() {
 
     /* colorscheme for the datasets */
     const colorscheme = [
-        {index: 0, color: "#79d06e"},
+        {index: 0, color: "#39a22a"},
         {index: 1, color: "#da6868"},
-        {index: 2, color: "#cfd574"},
+        {index: 2, color: "#a2a852"},
         {index: 3, color: "#c99664"},
         {index: 4, color: "#6384d2"},
     ];
 
-    const [chartWidth, setC] = React.useState(window.screen.width * 0.4);
-    const [chartHeith, setChartHeith] = React.useState(window.screen.height * 0.8);
-
-    const [divWidth, setDivWidth] = useState(window.innerWidth);
-    const [divHeight, setDivHeight] = useState(window.innerHeight);
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -40,33 +35,9 @@ export default function Studio() {
                 setStudioChart(response.data.content)
                 setModuleId(response.data.id)
                 setCategoryId(response.data.category_id)
-                handleResize();
             })
         }
-        function handleResize() {
-            setStudioChart(prevState => {
 
-                return {
-                    ...prevState,
-                    chart: {
-                        ...prevState.chart,
-                        width: `${window.innerWidth * 0.4}`,
-                        height: `${window.innerHeight * 0.8}`
-                    }
-
-                };
-            });
-        }
-
-        handleResize();
-
-        window.addEventListener("resize", handleResize);
-        window.addEventListener("orientationchange", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-            window.removeEventListener("orientationchange", handleResize);
-        };
     }, []);
 
     /* the initial state of the studiochart that is set when studio is first opened */
@@ -76,8 +47,6 @@ export default function Studio() {
             style: {
                 fontFamily: "Tahoma"
             },
-            width: `${divWidth * 0.4}`,
-            height: `${divHeight * 0.8}`
         },
         style: {
             borderColor: "#1A1616"
@@ -130,14 +99,16 @@ export default function Studio() {
             name: "name",
             data: [""],
             borderWidth: 0,
-            color: "#b0ffa6",
+            color: "#39a22a",
         }]
     });
 
     /* messages shown to user */
     const [errorMessage, setErrorMessage] = useState([]);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
-    const [successMessage, setSuccessMessage] = useState("SUCCESS: Your chart has been posted");
+    const [successMessage, setSuccessMessage] = useState(
+        !editModule ? "SUCCESS: Your chart has been posted\nRedirecting..." : "SUCCESS: Your chart has been updated\nRedirecting..."
+    );
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     /* chart objects */
@@ -179,15 +150,16 @@ export default function Studio() {
         return hasError;
     }
 
-    function showSuccessMessageForDuration(message, duration) {
+    function showSuccessMessageForDuration(duration) {
 
         /* sets the showSuccessMessage to true to show the success message */
-        setSuccessMessage(message)
         setShowSuccessMessage(true);
 
         /* sets timeout for the duration input and then sets the showSuccessMessage to false */
         setTimeout(() => {
             setShowSuccessMessage(false);
+            navigate(`/Dashboard?CategoryId=${categoryId}`)
+
         }, duration);
     }
 
@@ -207,25 +179,30 @@ export default function Studio() {
         axios.post("https://onlybackend-production.up.railway.app/studio/createModule", postChart, {withCredentials: true})
 
         /* shows success message*/
-        setSuccessMessage("SUCCESS: Your chart has been posted");
-        showSuccessMessageForDuration(successMessage, 5000);
-
-        /* resets the whole studio back to its initial state */
-        setStudioChart(studioChartInitState);
-        setToolbarKey(key => key + 1);
-        setCategoryId(null);
+        showSuccessMessageForDuration(2000);
     }
 
     async function handleUpdateChart(postChart){
 
+        postChart.id = moduleId;
         /* posts the chart to the database */
-        axios.post("https://onlybackend-production.up.railway.app/studio/createModule", postChart, {withCredentials: true})
+
+        console.log("postedChart: ", postChart)
+        await axios.put(
+            "https://onlybackend-production.up.railway.app/studio/updateModuleContent",
+            postChart
+            ,{
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                withCredentials: true,
+            }
+        ).then((response) => {
+            console.log("response: ",response.data)
+        })
 
         /* shows success message*/
-        setSuccessMessage("SUCCESS: Your chart has been updated");
-        await showSuccessMessageForDuration(successMessage, 5000);
-
-        await navigate("/Dashboard")
+        showSuccessMessageForDuration(2000);
     }
 
     function createChart() {
@@ -236,10 +213,6 @@ export default function Studio() {
             /* creates a const of the chart that is going to be sent */
             const chartToSubmit = studioChart;
 
-            /* change the width and height to the standard width and height */
-            chartToSubmit.chart.width = 365;
-            chartToSubmit.chart.height = 345;
-
             /* creates a post chart with the needed data to be stored in the database */
             const postChart = {
                 category_id: categoryId,
@@ -248,6 +221,7 @@ export default function Studio() {
             };
 
             if(editModule){
+                setSuccessMessage("SUCCESS: Your chart has been updated");
                 handleUpdateChart(postChart)
             }
 
@@ -264,6 +238,20 @@ export default function Studio() {
         }
     }
 
+    async function deleteChart(){
+        await setSuccessMessage("SUCCESS: Your chart has been deleted\nRedirecting...")
+        await axios.delete(
+            `https://onlybackend-production.up.railway.app/studio/deleteModule/` + moduleId,
+            {
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                withCredentials: true
+            }
+        ).then(showSuccessMessageForDuration(2000)
+        )
+    }
+
     return (
 
         <div className="studio">
@@ -272,15 +260,12 @@ export default function Studio() {
             <NavBar/>
             {/* --STUDIO CONTAINER-- */}
             <div className="studio--container">
-                <div ref={(chartContainer) => {
-                    if (chartContainer && chartContainer.chart) {
-                        chartContainer.chart.reflow();
-                    }
-                }}
+                <div
                      className="studio--chart"
                 >
                     {/* --HIGHCHART-- */}
                     <HighchartsReact
+                        containerProps={{ style: { height: "100%", weight: "100%" } }}
                         highcharts={Highcharts}
                         options={studioChart}
                     />
@@ -296,6 +281,7 @@ export default function Studio() {
                         setCategoryId={setCategoryId}
                         categoryId={categoryId}
                         createChart={createChart}
+                        deleteChart={deleteChart}
                     />
                 </div>
             </div>

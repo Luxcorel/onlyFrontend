@@ -23,7 +23,7 @@ export default function StudioToolbar(props) {
     let table
 
     function deleteChart(){
-        axios.delete()
+        props.deleteChart()
     }
 
     switch (tableType) {

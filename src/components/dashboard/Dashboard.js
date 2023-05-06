@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
 import StockDropdownMenu from "./StockDropdownMenu";
+import EditableLayout from "./EditableLayout"
 import {wait} from "@testing-library/user-event/dist/utils";
 /*import { SearchBox } from 'react-search-box';*/
 
@@ -19,33 +20,91 @@ export default function Dashboard() {
     const [currentStockId, setCurrentStockId] = useState(null);
     const [currentCategoryId, setCurrentCategoryId] = useState(null);
 
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const categoryIndexId = searchParams.get("CategoryId") || null;
+    const otherUserID = searchParams.get("User") || null
+    const [ownDashboard, setOwnDashboard] = useState(true)
+
+
     useEffect(() => {
 
-        axios.get("https://onlybackend-production.up.railway.app/fetch-current-user-id", {withCredentials: true}).then(
-            (response) => {
-                setUserId(response.data)
+        if(otherUserID == null) {
+            axios.get("https://onlybackend-production.up.railway.app/fetch-current-user-id", {withCredentials: true}).then(
+                (response) => {
+                    if (parseInt(otherUserID) === response.data || otherUserID == null) {
+                        setUserId(response.data)
+                    } else {
+                        setUserId(otherUserID)
+                        setOwnDashboard(false)
+                    }
+                })
+        }
+        else{
+            setUserId(otherUserID)
+        }
+    }, []);
 
-            axios.get("https://onlybackend-production.up.railway.app/dashboard/" + response.data,
-                {withCredentials: true}).then((response) => {
-                    setDashboard(response.data);
+    useEffect(() => {
+        if (!userId) {
+            return; // exit early if userId is not yet defined
+        }
 
-                //only if there are stocks inside the dashboard the activeStockTab will be set to the first stock in
-                // the dashboard, and also the currentStockId will also be set to the first stock
-                if(response.data.stocks.length !== 0){
-                    setActiveStockTab(0)
-                    setCurrentStockId(response.data.stocks[0].id)
+        axios.get("https://onlybackend-production.up.railway.app/dashboard/get/" + userId,
+            {withCredentials: true}).then((response) => {
+            setDashboard(response.data);
 
-                    //only if there are categories inside the first stock the activeCategoryTab will be set to the
-                    // first one, and also the currentCategoryId will be set to the first Category in the stock
-                    if(response.data.stocks[0].categories.length !== 0){
-                        setCurrentCategoryId(response.data.stocks[0].categories[0].id)
-                        setActiveCategoryTab(0)
+
+
+            //only if there are stocks inside the dashboard the activeStockTab will be set to the first stock in
+            // the dashboard, and also the currentStockId will also be set to the first stock
+            if(response.data.stocks.length !== 0){
+                setActiveStockTab(0)
+                setCurrentStockId(response.data.stocks[0].id)
+
+                //only if there are categories inside the first stock the activeCategoryTab will be set to the
+                // first one, and also the currentCategoryId will be set to the first Category in the stock
+                if(response.data.stocks[0].categories.length !== 0){
+                    setCurrentCategoryId(response.data.stocks[0].categories[0].id)
+                    setActiveCategoryTab(0)
+                }
+            }
+
+            //this code is usedwhenever the url wants to redirect the user to a specific dashboard page through a
+            // categoryID it loops through the stocks and categories to find if its possible to find, if it doesnt
+            // find it doesnt set a new stock tab and category tab
+            if(categoryIndexId != null){
+
+                let categoryIndexToFind, stockIndexToFind;
+                let foundCategoryID = false;
+
+                for (let i = 0; i < response.data.stocks.length; i++) {
+                    const stock = response.data.stocks[i];
+
+                    for (let j = 0; j < stock.categories.length; j++) {
+                        const category = stock.categories[j];
+
+                        if (category.id === parseInt(categoryIndexId)) {
+
+                            //if the categoryID in the URL can be found in the arrays the tab will redirect to the
+                            // correct page
+                            setCurrentCategoryId(stock.id)
+                            setActiveStockTab(i)
+
+                            setCurrentCategoryId(category.id)
+                            setActiveCategoryTab(j)
+
+                            foundCategoryID = true
+                        }
                     }
                 }
-                setIsLoading(false);
-            });
-        })
-    }, []);
+                if(!foundCategoryID) console.error("CategoryId["+categoryIndexId+
+                    "] could not be found in the dashboard")
+            }
+
+            setIsLoading(false);
+        });
+    }, [userId]);
 
     const handleStockTabClick = (index) => {
         //changes the button index from the input
@@ -203,10 +262,12 @@ export default function Dashboard() {
                             </button>
                         ))}
                         {/* --STOCK DROPDOWN MENU-- */}
-                        <StockDropdownMenu
+                        {ownDashboard && (
+                            <StockDropdownMenu
                             addStock={handleAddStock}
                             removeStock={handleRemoveStock}
                         />
+                        )}
                     </div>
                     <div className="stock-tab-content">
                         <div className="dashboard-category-tab-container">
@@ -226,7 +287,7 @@ export default function Dashboard() {
                                 ))}
                                 { /* --CATEGORY DROP DOWN-- */}
                                 {/* checks to see that a stock is selected */}
-                                {activeStockTab != null && (
+                                {activeStockTab != null && ownDashboard && (
                                     <CategoryDropdownMenu
                                         addCategory={handleAddCategory}
                                         removeCategory={handleRemoveCategory}
@@ -252,7 +313,7 @@ export default function Dashboard() {
                                         {/* --MODULES-- */}
                                         {/* if there are no modules in the category, a single empty module with a
                                         button to create a module appears */}
-                                        {category.moduleEntities.length === 0 ? (
+                                        {ownDashboard && category.moduleEntities.length === 0 ? (
                                             <div className="dashboard-empty-module">
                                                 <Link to={`/Studio?stockIndex=${currentStockId}&categoryIndex=${currentCategoryId}`}>
                                                     <button>+</button>
@@ -261,20 +322,9 @@ export default function Dashboard() {
                                         ) : (
                                             {/* if there are any moules in the category the modules will be
                                              displayed as highcharts*/},
-                                            category.moduleEntities.map((moduleEntity) => (
-                                                <div key={moduleEntity.id} className="dashboard-module-container">
-                                                    <pre>
-                                                        <Link to={`/Studio?editModule=${true}&moduleIndex=${moduleEntity.id}`}>
-                                                            <button>edit</button>
-                                                        </Link>
-                                                        <HighchartsReact
-                                                            highcharts={Highcharts}
-                                                            options={moduleEntity.content}
-                                                        />
-                                                    </pre>
 
-                                                </div>
-                                                ))
+                                            <EditableLayout category={category} />
+
                                             )}
                                     </div>
                                 ))}
