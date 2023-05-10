@@ -26,10 +26,11 @@ async function logout() {
         console.log(error)
     }
 
-    window.location.replace("https://onlyfrontend-production.up.railway.app/");
+    window.location.replace("https://onlyfrontend-production.up.railway.app");
 }
 
 export default function NavBar() {
+
     return (
         <div className="navbar-container">
             <Link to="/mypage">
@@ -48,7 +49,7 @@ export default function NavBar() {
                     <box-icon name='search'></box-icon>
                 </div>
             </Link>
-            <Link to="/Dashboard">
+            <Link to="../Dashboard">
                 <div className="navbar--icon">
                     <box-icon name='news'></box-icon>
                 </div>

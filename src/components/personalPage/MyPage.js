@@ -11,10 +11,43 @@ export default function PersonalPage() {
     const [username, setUsername] = React.useState();
     const [userData, setUserData] = React.useState();
     const [isVisible, setIsVisible] = React.useState(false)
+    const [subscribed, setSubscribed] = React.useState(0)
+    const autoscrollRef = React.useRef(null)
 
     const navigate = useNavigate();
 
     document.title = `${username}`
+
+    const [scrollPos, setScrollPos] = useState(0);
+    const [scrollDir, setScrollDir] = useState(true); // true for right, false for left
+
+    useEffect(() => {
+        const scrollInterval = setInterval(() => {
+            // Get the reference to the element that needs to be scrolled
+            const element = autoscrollRef.current;
+            if (element) {
+
+                // Check the direction of scrolling and update the scroll position accordingly
+                if (scrollDir) {
+                    if (element.scrollLeft < element.scrollWidth - element.clientWidth) {
+                        setScrollPos(scrollPos + 1);
+                        element.scrollLeft += 1; // scroll to the right
+                    } else {
+                        setScrollDir(false); // change direction to left
+                    }
+                } else {
+                    if (element.scrollLeft > 0) {
+                        setScrollPos(scrollPos - 1);
+                        element.scrollLeft -= 1; // scroll to the left
+                    } else {
+                        setScrollDir(true); // change direction to right
+                    }
+                }
+            }
+        }, 50);
+
+        return () => clearInterval(scrollInterval);
+    }, [scrollPos, scrollDir]);
 
     useEffect(() => {
 
@@ -46,6 +79,17 @@ export default function PersonalPage() {
                 console.log('API response:', response2.data);
                 console.log(username)
                 setUserData(response2.data);
+
+
+                const responseSubscribers = await axios.get(`https://onlybackend-production.up.railway.app/subscriptions/get-my-subscribe-count`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then(responseSubscribers => {
+                    setSubscribed(responseSubscribers.data)
+                });
 
 
             } catch (error) {
@@ -135,6 +179,7 @@ export default function PersonalPage() {
             </div>
             <div className="mypage--text--container">
                 <h2>{username}</h2>
+                <p className="mypage-subscribed"> <span className="subscribed-count">{subscribed}</span> Subs</p>
                 <div className="mypage--bio--container">
                     {isEditable ? (
                         <textarea
@@ -142,16 +187,21 @@ export default function PersonalPage() {
                             onChange={handleTextAreaChange}
                             rows={5}
                             cols={30}
-                            maxLength={700}
+                            maxLength="100"
                             className="mypage--bio"
                         />
                     ) : (
                         <p>{userData}</p>
                     )}
-                    <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                    <div className="mypage-buttons">
+                        <button onClick={handleButtonClick}>{isEditable ? 'Save' : 'Edit'}</button>
+                    </div>
                 </div>
             </div>
-            <div className="personalPage-review-section">
+            <div className="personalPage-review-section"
+                 ref={autoscrollRef}
+                 style={{overflowX: "auto", whiteSpace: "nowrap"}}
+            >
                 {isVisible && showReviews}
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import {useLocation, useNavigate, Link} from "react-router-dom";
 
 export default function Login() {
     document.title="Login"
@@ -7,6 +8,11 @@ export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const redirect = searchParams.get("Redirect") || null;
+    const navigate = useNavigate();
 
     function handleUsernameChange(event) {
         setUsername(event.target.value);
@@ -19,9 +25,7 @@ export default function Login() {
     function handleSubmit(event) {
         event.preventDefault();
         setError(null);
-
-        axios
-            .post(
+        axios.post(
                 'https://onlybackend-production.up.railway.app/plz',
                 `username=${username}&password=${password}`,
                 {
@@ -32,11 +36,18 @@ export default function Login() {
                 }
             )
             .then(() => {
-                window.location.href = 'https://onlyfrontend-production.up.railway.app/Dashboard';
+                if(redirect == null){
+                    navigate('../Feed')
+                }
+                else{
+                    navigate(`../${redirect}`)
+                }
+
             })
             .catch((error) => {
                 setError(error.response.data.error);
             });
+        console.log(redirect)
     }
 
     return (
@@ -70,6 +81,9 @@ export default function Login() {
                 <button type="submit" className="login--submit">
                     Log in
                 </button>
+                <Link to={"../Register"}>
+                    Not a user? Register here.
+                </Link>
             </form>
         </div>
     );

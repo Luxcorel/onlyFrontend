@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import NavBar from "../navBar/NavBar";
 
 export default function SearchPage() {
+    document.title = "Search"
 
     const [searchData, setSearchData] = React.useState(null);
 

@@ -8,23 +8,29 @@ import CategoryDropdownMenu from "./CategoryDropdownMenu";
 import StockDropdownMenu from "./StockDropdownMenu";
 import EditableLayout from "./EditableLayout"
 import {wait} from "@testing-library/user-event/dist/utils";
+import icon from "../../assets/images/web-design.gif";
+import emptyCat from "../../assets/images/emptyCharts.gif"
+import DashboardProfile from "./DashboardProfile";
+
 /*import { SearchBox } from 'react-search-box';*/
 
 export default function Dashboard() {
     document.title = "Dashboard"
     const [dashboard, setDashboard] = useState(null);
+    const [dashboardLayout, setDashboardLayout] = useState(null)
     const [activeStockTab, setActiveStockTab] = useState(null);
     const [activeCategoryTab, setActiveCategoryTab] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [userId, setUserId] = useState();
     const [currentStockId, setCurrentStockId] = useState(null);
     const [currentCategoryId, setCurrentCategoryId] = useState(null);
+    const [userName, setUserName] = useState ("n/a")
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const categoryIndexId = searchParams.get("CategoryId") || null;
     const otherUserID = searchParams.get("User") || null
-    const [ownDashboard, setOwnDashboard] = useState(true)
+    const [ownDashboard, setOwnDashboard] = useState(false)
 
 
     useEffect(() => {
@@ -34,6 +40,7 @@ export default function Dashboard() {
                 (response) => {
                     if (parseInt(otherUserID) === response.data || otherUserID == null) {
                         setUserId(response.data)
+                        setOwnDashboard(true)
                     } else {
                         setUserId(otherUserID)
                         setOwnDashboard(false)
@@ -50,22 +57,29 @@ export default function Dashboard() {
             return; // exit early if userId is not yet defined
         }
 
+        console.log(userId)
+
+        axios.get("https://onlybackend-production.up.railway.app/getNameFromUserId/" + userId, {withCredentials:true}).then((response) => {
+            setUserName(response.data);
+        })
+
         axios.get("https://onlybackend-production.up.railway.app/dashboard/get/" + userId,
             {withCredentials: true}).then((response) => {
-            setDashboard(response.data);
-
+            setDashboard(response.data.dashboard);
+            setDashboardLayout(response.data.dashboardLayout)
+            console.log(response.data)
 
 
             //only if there are stocks inside the dashboard the activeStockTab will be set to the first stock in
             // the dashboard, and also the currentStockId will also be set to the first stock
-            if(response.data.stocks.length !== 0){
+            if(response.data.dashboard.stocks.length !== 0){
                 setActiveStockTab(0)
-                setCurrentStockId(response.data.stocks[0].id)
+                setCurrentStockId(response.data.dashboard.stocks[0].id)
 
                 //only if there are categories inside the first stock the activeCategoryTab will be set to the
                 // first one, and also the currentCategoryId will be set to the first Category in the stock
-                if(response.data.stocks[0].categories.length !== 0){
-                    setCurrentCategoryId(response.data.stocks[0].categories[0].id)
+                if(response.data.dashboard.stocks[0].categories.length !== 0){
+                    setCurrentCategoryId(response.data.dashboard.stocks[0].categories[0].id)
                     setActiveCategoryTab(0)
                 }
             }
@@ -78,8 +92,8 @@ export default function Dashboard() {
                 let categoryIndexToFind, stockIndexToFind;
                 let foundCategoryID = false;
 
-                for (let i = 0; i < response.data.stocks.length; i++) {
-                    const stock = response.data.stocks[i];
+                for (let i = 0; i < response.data.dashboard.stocks.length; i++) {
+                    const stock = response.data.dashboard.stocks[i];
 
                     for (let j = 0; j < stock.categories.length; j++) {
                         const category = stock.categories[j];
@@ -202,9 +216,9 @@ export default function Dashboard() {
     }
 
     async function refreshDashboard(){
-        await axios.get("https://onlybackend-production.up.railway.app/dashboard/" + userId,
+        await axios.get("https://onlybackend-production.up.railway.app/dashboard/get/" + userId,
             {withCredentials: true}).then((response) => {
-                setDashboard(response.data);
+                setDashboard(response.data.dashboard);
             ;})
     }
 
@@ -244,11 +258,13 @@ export default function Dashboard() {
         <div className="dashboard">
             <NavBar />
             <div className="dashboard-content-wrapper">
-                <div className="dashboard-button-underlay"></div>
-                <Link to="/profile_page">
-                    <button className="dashboard-profile-button">
-                    </button>
-                </Link>
+                <div className="dashboard-button-underlay">
+                    <DashboardProfile
+                        userName={userName}
+                        ownDashboard={ownDashboard}
+                        userId={userId}
+                    />
+                </div>
                 <div className="dashboard-stock-tab-container">
                     <div className="dashboard-stock-tab-buttons">
                         {/* --STOCK BUTTONS-- */}
@@ -315,15 +331,20 @@ export default function Dashboard() {
                                         button to create a module appears */}
                                         {ownDashboard && category.moduleEntities.length === 0 ? (
                                             <div className="dashboard-empty-module">
+                                                    <img width="100px" src={emptyCat}/>
                                                 <Link to={`/Studio?stockIndex=${currentStockId}&categoryIndex=${currentCategoryId}`}>
-                                                    <button>+</button>
+                                                    <button className="dashboard-empty-module-button">Create your first chart <span className="dashboard-empty-module-button-here">here</span>!</button>
                                                 </Link>
                                             </div>
                                         ) : (
                                             {/* if there are any moules in the category the modules will be
                                              displayed as highcharts*/},
 
-                                            <EditableLayout category={category} />
+                                            <EditableLayout
+                                                category={category}
+                                                dashboardLayout={dashboardLayout}
+                                                ownDashboard={ownDashboard}
+                                            />
 
                                             )}
                                     </div>
