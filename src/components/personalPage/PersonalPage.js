@@ -233,6 +233,7 @@ export default function PersonalPage() {
         await post()
     }
 
+    //create review for the selected user and then refresh the page
     const post = async () => {
 
         try {
@@ -247,7 +248,12 @@ export default function PersonalPage() {
                     },
                     withCredentials: true,
                 }
-            );
+            ).then(response => {
+                if (response.status === 200) {
+                    window.location.reload()
+                }
+            })
+
         } catch (error) {
             console.log(error)
         }
