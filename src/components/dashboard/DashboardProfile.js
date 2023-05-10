@@ -10,7 +10,11 @@ export default function DashboardProfile(props){
 
         axios.get(`https://onlybackend-production.up.railway.app/subscriptions/is-user-subscribed-to?username=${props.userName}`, {withCredentials: true}
         ).then((response) => {
-            setSubscribed(response.data)
+            if (response.status === 200) {
+                setSubscribed(response.data)
+            } else {
+                setSubscribed(false)
+            }
         }).catch((error) => {
             setSubscribed(false)
         })
