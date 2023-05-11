@@ -5,6 +5,9 @@ import axios from "axios"
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import NavBar from "../navBar/NavBar";
+import Exporting from 'highcharts/modules/exporting';
+
+Exporting(Highcharts);
 
 export default function Studio() {
     document.title = "Studio"
@@ -25,18 +28,42 @@ export default function Studio() {
     const moduleIndex = searchParams.get("moduleIndex") || null;
     const [moduleId, setModuleId] = useState(null);
     const navigate = useNavigate();
+    const [username, setUsername] = useState()
+    const [loading, setLoading] = useState(true);
 
-    React.useEffect(() => {
+    React.useEffect( () => {
 
-        if(editModule && moduleIndex != null){
-            axios.get("https://onlybackend-production.up.railway.app/studio/getModuleFromId/" + moduleIndex,
-                {withCredentials:true}).then((response) =>{
-                console.log(response.data.content)
-                setStudioChart(response.data.content)
-                setModuleId(response.data.id)
-                setCategoryId(response.data.category_id)
-            })
+        const fetchData = async() => {
+            try {
+
+                await axios.get(process.env.REACT_APP_BACKEND_URL+`/principal-username`,
+                    {
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        withCredentials: true,
+                    }).then((response) => {
+                        handleUserNameChange(response.data)
+                })
+
+                if (editModule && moduleIndex != null) {
+                    await axios.get(process.env.REACT_APP_BACKEND_URL+"/studio/getModuleFromId/" + moduleIndex,
+                        {withCredentials: true}).then((response) => {
+                        console.log(response.data.content)
+                        setStudioChart(response.data.content)
+                        setModuleId(response.data.id)
+                        setCategoryId(response.data.category_id)
+                    })
+                }
+
+            } catch(error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
         }
+
+        fetchData().then();
 
     }, []);
 
@@ -111,7 +138,6 @@ export default function Studio() {
             borderWidth: 0,
             color: "#39a22a",
         }],
-        
     });
 
     /* messages shown to user */
@@ -133,6 +159,24 @@ export default function Studio() {
     function putChartToInitState() {
         /*setStudioChart(studioChartInitState)*/
     }
+
+    const handleUserNameChange = (name) => {
+        setStudioChart(prevState => ({
+            ...prevState,
+            exporting: {
+                chartOptions: {
+                    subtitle: {
+                        text: `Created by ${name} on OnlyFin`,
+                        style: {
+                            fontSize: '8px',
+                            color: '#000'
+                        }
+                    }
+                }
+            }
+        }))
+    };
+
     function checkForError() {
 
         /* Starts with assuming there are no errors by setting hasError to false and creates an empty table
@@ -176,6 +220,8 @@ export default function Studio() {
 
     function showErrorMessageForDuration(duration) {
 
+        console.log(username)
+
         /* sets the showErrorMessage to true to show the error messages */
         setShowErrorMessage(true);
 
@@ -187,7 +233,7 @@ export default function Studio() {
 
     function handlePostChart(postChart){
         /* posts the chart to the database */
-        axios.post("https://onlybackend-production.up.railway.app/studio/createModule", postChart, {withCredentials: true})
+        axios.post(process.env.REACT_APP_BACKEND_URL+"/studio/createModule", postChart, {withCredentials: true})
 
         /* shows success message*/
         showSuccessMessageForDuration(2000);
@@ -200,7 +246,7 @@ export default function Studio() {
 
         console.log("postedChart: ", postChart)
         await axios.put(
-            "https://onlybackend-production.up.railway.app/studio/updateModuleContent",
+            process.env.REACT_APP_BACKEND_URL+"/studio/updateModuleContent",
             postChart
             ,{
                 headers: {
@@ -252,7 +298,7 @@ export default function Studio() {
     async function deleteChart(){
         await setSuccessMessage("SUCCESS: Your chart has been deleted\nRedirecting...")
         await axios.delete(
-            `https://onlybackend-production.up.railway.app/studio/deleteModule/` + moduleId,
+            process.env.REACT_APP_BACKEND_URL+`/studio/deleteModule/` + moduleId,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -275,11 +321,15 @@ export default function Studio() {
                      className="studio--chart"
                 >
                     {/* --HIGHCHART-- */}
-                    <HighchartsReact
-                        containerProps={{ style: { height: "100%", weight: "100%" } }}
-                        highcharts={Highcharts}
-                        options={studioChart}
-                    />
+                    {loading ? (
+                        <div className="spinner"></div>
+                    ) : (
+                        <HighchartsReact
+                            containerProps={{ style: { height: '100%', weight: '100%' } }}
+                            highcharts={Highcharts}
+                            options={studioChart}
+                        />
+                    )}
                 </div>
                 <div className="studio--toolbar">
 

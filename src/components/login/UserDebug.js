@@ -5,7 +5,7 @@ export default function UserDebug() {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        axios.get('https://onlybackend-production.up.railway.app/user', {withCredentials: true})
+        axios.get(process.env.REACT_APP_BACKEND_URL+'/user-debug?username=', {withCredentials: true})
             .then(response => {
                 setUserData(response.data);
             })

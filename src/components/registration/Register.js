@@ -25,7 +25,7 @@ export default function Register() {
         event.preventDefault();
         setError(null);
 
-        axios.post('https://onlybackend-production.up.railway.app/register', {
+        axios.post(process.env.REACT_APP_BACKEND_URL+'/register', {
             email: email,
             username: username,
             password: password
@@ -36,7 +36,7 @@ export default function Register() {
             withCredentials: true
         })
             .then(response => {
-                window.location.href = 'https://onlyfrontend-production.up.railway.app/Login';
+                window.location.href = process.env.REACT_APP_FRONTEND_URL+'/Login/';
             })
             .catch(error => {
                 setError(error.response.data.error);

@@ -8,8 +8,8 @@ import {Link} from "react-router-dom";
 import Highcharts from "highcharts";
 import axios from "axios";
 import Exporting from 'highcharts/modules/exporting';
-Exporting(Highcharts);
 
+Exporting(Highcharts);
 
 export default function EditableLayout(props) {
 
@@ -41,7 +41,7 @@ export default function EditableLayout(props) {
 
             console.log(JSON.stringify({layoutDTO: updatedLayout}));
             axios.put(
-                "https://onlybackend-production.up.railway.app/studio/updateDashboardLayout",
+                process.env.REACT_APP_BACKEND_URL+"/studio/updateDashboardLayout",
                 updatedLayout,
                 {
                     headers: {

@@ -13,7 +13,7 @@ Make logout function (POST / logout)
 
 async function logout() {
     try {
-        await axios.post(`https://onlybackend-production.up.railway.app/logout`,
+        await axios.post(process.env.REACT_APP_BACKEND_URL+`/logout`,
             {},
             {
                 headers: {
@@ -26,7 +26,7 @@ async function logout() {
         console.log(error)
     }
 
-    window.location.replace("https://onlyfrontend-production.up.railway.app");
+    window.location.replace(process.env.REACT_APP_FRONTEND_URL);
 }
 
 export default function NavBar() {

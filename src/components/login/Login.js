@@ -26,7 +26,7 @@ export default function Login() {
         event.preventDefault();
         setError(null);
         axios.post(
-                'https://onlybackend-production.up.railway.app/plz',
+            process.env.REACT_APP_BACKEND_URL+'/plz',
                 `username=${username}&password=${password}`,
                 {
                     headers: {

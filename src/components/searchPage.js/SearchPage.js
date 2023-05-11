@@ -13,7 +13,7 @@ export default function SearchPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://onlybackend-production.up.railway.app/search-all-analysts-include-sub-info`,
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/search-all-analysts-include-sub-info`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -41,7 +41,7 @@ export default function SearchPage() {
     const onSearch = (searchTerm) => {
         console.log('Performing search with searchTerm:', searchTerm);
 
-        axios.get(`https://onlybackend-production.up.railway.app/search-analyst-include-sub-info?search=${searchTerm}`,
+        axios.get(process.env.REACT_APP_BACKEND_URL+`/search-analyst-include-sub-info?search=${searchTerm}`,
             {
                 headers: {
                     'Content-type': 'application/json'

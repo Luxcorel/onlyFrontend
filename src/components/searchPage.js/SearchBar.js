@@ -23,7 +23,7 @@ export default function SearchBar(props) {
     async function handleDropdownResults(searchTerm) {
 
         try {
-            const response = await axios.get(`https://onlybackend-production.up.railway.app/search-analyst-include-sub-info?search=${searchTerm}`,
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/search-analyst-include-sub-info?search=${searchTerm}`,
                 {
                     headers: {
                         'Content-type': 'application/json'

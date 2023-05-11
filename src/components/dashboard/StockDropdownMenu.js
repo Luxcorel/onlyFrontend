@@ -14,7 +14,7 @@ export default function StockDropdownMenu(props) {
      * The menu closes when clicked outside the dropdown menu
      */
     useEffect(() => {
-        axios.get("https://onlybackend-production.up.railway.app/dashboard/getStockRef", {withCredentials: true}).then((response) => {
+        axios.get(process.env.REACT_APP_BACKEND_URL+"/dashboard/getStockRef", {withCredentials: true}).then((response) => {
             setRefStocks(response.data);
             setRefStocksToShow(response.data);
             console.log("stockRefs: ", response.data);

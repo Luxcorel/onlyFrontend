@@ -36,7 +36,7 @@ export default function Dashboard() {
     useEffect(() => {
 
         if(otherUserID == null) {
-            axios.get("https://onlybackend-production.up.railway.app/fetch-current-user-id", {withCredentials: true}).then(
+            axios.get(process.env.REACT_APP_BACKEND_URL+"/fetch-current-user-id", {withCredentials: true}).then(
                 (response) => {
                     if (parseInt(otherUserID) === response.data || otherUserID == null) {
                         setUserId(response.data)
@@ -59,11 +59,11 @@ export default function Dashboard() {
 
         console.log(userId)
 
-        axios.get("https://onlybackend-production.up.railway.app/getNameFromUserId/" + userId, {withCredentials:true}).then((response) => {
+        axios.get(process.env.REACT_APP_BACKEND_URL+"/getNameFromUserId/" + userId, {withCredentials:true}).then((response) => {
             setUserName(response.data);
         })
 
-        axios.get("https://onlybackend-production.up.railway.app/dashboard/get/" + userId,
+        axios.get(process.env.REACT_APP_BACKEND_URL+"/dashboard/get/" + userId,
             {withCredentials: true}).then((response) => {
             setDashboard(response.data.dashboard);
             setDashboardLayout(response.data.dashboardLayout)
@@ -161,7 +161,7 @@ export default function Dashboard() {
 
     async function handleAddCategory(categoryName) {
         if (categoryName !== ""){
-            await axios.post("https://onlybackend-production.up.railway.app/studio/createCategory",
+            await axios.post(process.env.REACT_APP_BACKEND_URL+"/studio/createCategory",
                 {
                     name: categoryName,
                     stock_id: currentStockId
@@ -177,7 +177,7 @@ export default function Dashboard() {
     async function handleChangeCategoryName(inputName){
 
         await axios.put(
-            "https://onlybackend-production.up.railway.app/studio/updateCategoryName",
+            process.env.REACT_APP_BACKEND_URL+"/studio/updateCategoryName",
             {
                 id: currentCategoryId,
                 name: inputName
@@ -202,7 +202,7 @@ export default function Dashboard() {
 
     async function handleRemoveCategory() {
         await axios.delete(
-            `https://onlybackend-production.up.railway.app/studio/deleteCategory/` + currentCategoryId,
+            process.env.REACT_APP_BACKEND_URL+`/studio/deleteCategory/${currentCategoryId}`,
             {
                 headers: {
                     'Content-type': 'application/json'
@@ -216,14 +216,14 @@ export default function Dashboard() {
     }
 
     async function refreshDashboard(){
-        await axios.get("https://onlybackend-production.up.railway.app/dashboard/get/" + userId,
+        await axios.get(process.env.REACT_APP_BACKEND_URL+"/dashboard/get/" + userId,
             {withCredentials: true}).then((response) => {
                 setDashboard(response.data.dashboard);
             ;})
     }
 
     async function handleAddStock(stockRefId){
-        await axios.post("https://onlybackend-production.up.railway.app/studio/createStock",
+        await axios.post(process.env.REACT_APP_BACKEND_URL+"/studio/createStock",
             {
                 dashboardId: dashboard.id,
                 stockRefId: stockRefId
@@ -235,7 +235,7 @@ export default function Dashboard() {
 
     async function handleRemoveStock(){
         await axios.delete(
-            `https://onlybackend-production.up.railway.app/studio/deleteStock/` + currentStockId,
+            process.env.REACT_APP_BACKEND_URL+`/studio/deleteStock/` + currentStockId,
             {
                 headers: {
                     'Content-type': 'application/json'

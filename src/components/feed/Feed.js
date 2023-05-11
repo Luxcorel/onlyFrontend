@@ -18,7 +18,7 @@ export default function Feed() {
         const getData = async () => {
             try {
 
-                const response = await axios.get(`https://onlybackend-production.up.railway.app/feed/all-the-things`,
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/feed/all-the-things`,
                     {
                         headers: {
                             'Content-type': 'application/json'
