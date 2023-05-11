@@ -65,7 +65,7 @@ export default function SubscriptionBar() {
             const suggestion = subData[i]
             showSubs.push(
                 <div>
-                    <SubscriptionProfile key={i} username={subData[i].username}/>
+                    <SubscriptionProfile key={i} username={subData[i].username} userId={subData[i].id} />
                 </div>
             )
         }
