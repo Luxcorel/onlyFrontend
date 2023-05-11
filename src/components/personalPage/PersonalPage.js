@@ -247,7 +247,12 @@ export default function PersonalPage() {
                     },
                     withCredentials: true,
                 }
-            );
+            ).then(response => {
+                if (response.status === 200) {
+                    window.location.reload()
+                }
+            })
+
         } catch (error) {
             console.log(error)
         }
