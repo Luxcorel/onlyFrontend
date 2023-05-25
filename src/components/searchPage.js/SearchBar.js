@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from "axios";
 
 export default function SearchBar(props) {
@@ -9,21 +9,24 @@ export default function SearchBar(props) {
         setSearchTerm(event.target.value);
 
         handleDropdownResults(event.target.value);
-
-
     };
 
     const handleFormSubmit = (event) => {
-        event.preventDefault();
-        props.onSearch(searchTerm);
-        setSearchTerm('');
-        setDropdownResult([]);
+        try {
+            event.preventDefault();
+            props.onSearch(searchTerm);
+            setSearchTerm('');
+            setDropdownResult([]);
+        } catch (error) {
+            console.log("handleFormSubmit error: ", error)
+        }
+
     };
 
     async function handleDropdownResults(searchTerm) {
 
         try {
-            const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/search-analyst-include-sub-info?search=${searchTerm}`,
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL + `/search-analyst-include-sub-info?search=${searchTerm}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -32,7 +35,7 @@ export default function SearchBar(props) {
                 }
             );
 
-            if(searchTerm === '') {
+            if (searchTerm === '') {
                 setDropdownResult([]);
             } else {
                 setDropdownResult(response.data)
@@ -40,39 +43,49 @@ export default function SearchBar(props) {
 
 
         } catch (error) {
-            //setDropdownResult([]);
+            console.log("Dropdown error: ", error)
         }
     }
 
     function handleButtonSubmit(username) {
-        props.onSearch(username)
-        setDropdownResult([]);
-        setSearchTerm('');
+        try {
+            props.onSearch(username)
+            setDropdownResult([]);
+            setSearchTerm('');
+        } catch (error) {
+            console.log("handleButtonSubmit error: ", error);
+        }
+
     }
 
 
-
     return (
-        <div>
-            <form onSubmit={handleFormSubmit} className="search--form">
+        <div className="dropdown-container">
+            <form className="search--form" onSubmit={handleFormSubmit}>
+
                 <input
                     className="search--search"
                     type="text"
                     placeholder="Search..."
                     value={searchTerm}
                     onInput={handleChange}
+                    
                 />
-            </form>
-
-                {<div style={{marginLeft: "40%"}}>
-                    <ul>
+                {<div>
+                    <ul className="search-bar-dropdown-menu">
                         {dropdownResult.map((option, index) => (
-                            <li>
-                                <button key={index} onClick={() => handleButtonSubmit(option.profile.username)}>{option.profile.username}</button>
+                            <li
+                                key={index}
+                                onClick={() => handleButtonSubmit(option.profile.username)}
+                            >
+                                {option.profile.username}
+
                             </li>
                         ))}
                     </ul>
                 </div>}
+            </form>
+
 
         </div>
     );

@@ -8,6 +8,7 @@ export default function SearchPage() {
     document.title = "Search"
 
     const [searchData, setSearchData] = React.useState(null);
+    const [userNotFound, setUserNotFound] = React.useState(false);
 
 
     useEffect(() => {
@@ -54,14 +55,51 @@ export default function SearchPage() {
 
                 //console.log('API response:', response.data[0].username);
                 setSearchData(response.data)
-
+                setUserNotFound(false);
             })
             .catch(error => {
 
-                console.error('API error:', error);
-
+                if(error.response && error.response.status === 404) {
+                    console.log("User not found")
+                    setUserNotFound(true);
+                } else {
+                    console.error('Error:', error.message);
+                }
             });
     };
+
+    function renderComponents() {
+        if(searchData === null) {
+            return (
+            <div className="loader-container">
+                <div className="loader"></div>
+            </div>
+            )
+        } else if(userNotFound) {
+            return (
+                <div className="user-not-found">User not found</div>
+            )
+        } else {
+            return (
+                <div
+                    className="search--profile--container"
+                >
+                    {searchData.map((data, index) => (
+                        <div className="search--profile--tab" key={index}>
+                            <Profile
+                                key={index}
+                                name={data.profile.username}
+                                id={data.profile.id}
+                                isSubscribed={data.subscribed}
+                            >
+                            </Profile>
+                        </div>
+
+                    ))}
+                </div>
+            )
+        }
+    }
 
 
     return(
@@ -72,25 +110,7 @@ export default function SearchPage() {
             </div>
             <SearchBar onSearch={onSearch} classname="search--search"/>
 
-            {searchData === null ? (
-                <div>Failed to get search result</div>
-            ) : (
-                <div
-                    className="search--profile--container"
-                >
-                    {searchData.map((data, index) => (
-                        <div className="search--profile--tab" key={index}>
-                            <Profile
-                                key={index}
-                                name={data.profile.username}
-                                isSubscribed={data.subscribed}
-                            >
-                            </Profile>
-                        </div>
-
-                    ))}
-                </div>
-            )}
+            {renderComponents()}
         </div>
 
     )

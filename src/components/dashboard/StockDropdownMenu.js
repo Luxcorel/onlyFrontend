@@ -80,51 +80,59 @@ export default function StockDropdownMenu(props) {
 
 
     return (
+        <>
         <div ref={dropdownRef}>
-            <button onClick={handleToggleMenu}>...</button>
+            <button
+                onClick={handleToggleMenu}
+                className="dashboard-button-round"
+            >
+                <p className="dashboard-button-small-text">+</p>
+            </button>
 
             {showMenu && (
-
-                <ul style={{
-
-                        // >>>> OBS – TA BORT DETTA VID DESIGN <<<<<
-
-                        border: "1px solid #ccc",
-                        borderRadius: "5px",
-                        boxShadow: "0 0 5px rgba(0,0,0,0.3)",
-                        padding: "10px",
-                        zIndex: 10000,
-                        position: "absolute",
-                        overflow: "auto",
-                        height: "450px",
-                        width: "300px",
-                        backgroundColor: "#FFFFFF"
-
-                        // >>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
-                    }}>
-                    <div>
+                <div className="dashboard-drop-down-container dashboard-stock-dropdown">
+                    <div className="dashboard-stock-dropdown-top-container">
                         <input
+                            className="dashboard-input"
                             type="text"
                             placeholder="Search for a stock"
                             value={searchText}
                             onChange={(e) =>handleSearchTextChange(e.target.value)}
                         />
+                        <button
+                            onClick={() => handleRemoveStock()}
+                            className="dashboard-button"
+                        >
+                            Remove
+                        </button>
+                        <p> --- Add a new stock ---</p>
+
                     </div>
-                    <button onClick={() => handleRemoveStock()}>Remove</button>
-                    <p>---- Add a new stock ----</p>
-                    {refStocksToShow != null &&
+                    <div className="dashboard-add-stock-container">
+                    <ul>
+                        {refStocksToShow != null &&
                         refStocksToShow.map((stock) => (
-                        <div className="dashboard-stock-add-container" key={stock.id}>
-                            <li>{stock.name} [{stock.ticker}]</li>
-                            <button value={stock.id}
+                        <li>
+                            <div>
+                                <p>{stock.name} [{stock.ticker}]</p>
+                                <button
+                                    className="dashboard-button"
+                                    value={stock.id}
                                     onClick={() => handleAddStock(stock.id)}
-                            >Add</button>
-                        </div>
+                                >
+                                    <p>Add</p>
+                                </button>
+                            </div>
+                        </li>
                     ))}
-                </ul>
+                    </ul>
+                    </div>
+                </div>
                 )
             }
 
         </div>
+            {/*<p className="dashboard-dropdown-menu-text">⫷ ADD A STOCK</p>*/}
+        </>
     )
 }

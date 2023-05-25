@@ -55,6 +55,7 @@ export default function StudioToolbar(props) {
                 {table}
             </div>
             {/* --SUBMIT BUTTON-- */}
+            {props.loggedIn &&(
             <div className="studio--submit">
                 <button onClick={() => props.createChart()}> {submitButton}</button>
                 {editModule && (
@@ -63,6 +64,7 @@ export default function StudioToolbar(props) {
                     </button>
                 )}
             </div>
+            )}
 
         </>
 

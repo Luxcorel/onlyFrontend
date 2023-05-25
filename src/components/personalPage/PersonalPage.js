@@ -17,43 +17,42 @@ export default function PersonalPage() {
     const [subscribed, setSubscribed] = React.useState(0)
     const textareaRef = React.useRef()
     const autoscrollRef = React.useRef(null)
+    const [toScroll, setToScroll] = useState(true)
 
     document.title = `${username}`
 
     const [scrollPos, setScrollPos] = useState(0);
-    const [scrollDir, setScrollDir] = useState(true); // true for right, false for left
+    //const [scrollDir, setScrollDir] = useState(true); use this for autoscroll to the left
+
+    const handleHovering = () => {
+        setToScroll(false)
+    }
+    const handleNotHovering = () => {
+        setToScroll(true)
+    }
 
     useEffect(() => {
         const scrollInterval = setInterval(() => {
-            // Get the reference to the element that needs to be scrolled
             const element = autoscrollRef.current;
-            if (element) {
-
-                if (scrollDir) {
-                    if (element.scrollLeft < element.scrollWidth - element.clientWidth) {
-                        setScrollPos(scrollPos + 1);
-                        element.scrollLeft += 1; // scroll to the right
-                    } else {
-                        setScrollDir(false); // change direction to left
-                    }
-                } else {
-                    if (element.scrollLeft > 0) {
-                        setScrollPos(scrollPos - 1);
-                        element.scrollLeft -= 1; // scroll to the left
-                    } else {
-                        setScrollDir(true); // change direction to right
-                    }
+            if (element && toScroll) {
+                //if (scrollDir) {
+                if (element.scrollLeft < element.scrollWidth - element.clientWidth) {
+                    setScrollPos(scrollPos + 1);
+                    element.scrollLeft += 1;
                 }
+                /*else {
+                        setScrollDir(false);
+                    }
+                 }*/ // use this for autoscroll to the left (have to be fixed to work properly)
             }
         }, 50);
-
         return () => clearInterval(scrollInterval);
-    }, [scrollPos, scrollDir]);
+    }, [/*scrollDir, */ toScroll]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseReviews = await axios.get(process.env.REACT_APP_BACKEND_URL+`/reviews/fetch-all?targetUsername=${username}`,
+                const responseReviews = await axios.get(process.env.REACT_APP_BACKEND_URL + `/reviews/fetch-all?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -70,7 +69,7 @@ export default function PersonalPage() {
                     }
                 });
 
-                const responseIsPosted = await axios.get(process.env.REACT_APP_BACKEND_URL+`/reviews/get-my-review?targetUsername=${username}`,
+                const responseIsPosted = await axios.get(process.env.REACT_APP_BACKEND_URL + `/reviews/get-my-review?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -81,8 +80,6 @@ export default function PersonalPage() {
                         setIsPosted(true)
                     }
                 });
-
-
 
 
             } catch (error) {
@@ -103,10 +100,20 @@ export default function PersonalPage() {
     }, [username])
 
     useEffect(() => {
+        if (!userData) {
+            const redirectTimer = setTimeout(() => {
+                window.location.href = '/login';
+            }, 1000); // Delay of 3 seconds (adjust as needed)
+
+            return () => clearTimeout(redirectTimer); // Clear the timer if the component unmounts before the redirect
+        }
+    }, [userData]);
+
+    useEffect(() => {
 
         const fetchData = async () => {
             try {
-                const responseTargetUser = await axios.get(process.env.REACT_APP_BACKEND_URL+`/fetch-about-me-with-sub-info?username=${username}`,
+                const responseTargetUser = await axios.get(process.env.REACT_APP_BACKEND_URL + `/fetch-about-me-with-sub-info?username=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -117,7 +124,7 @@ export default function PersonalPage() {
                     setUserData(responseTargetUser.data);
                 });
 
-                const responseUser = await axios.get(process.env.REACT_APP_BACKEND_URL+`/principal-username`,
+                const responseUser = await axios.get(process.env.REACT_APP_BACKEND_URL + `/principal-username`,
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -131,15 +138,15 @@ export default function PersonalPage() {
                 });
 
 
-                const responseSubscribers = await axios.get(process.env.REACT_APP_BACKEND_URL+`/subscriptions/get-subscribe-count?targetUsername=${username}`,
+                const responseSubscribers = await axios.get(process.env.REACT_APP_BACKEND_URL + `/subscriptions/get-subscribe-count?targetUsername=${username}`,
                     {
                         headers: {
                             'Content-type': 'application/json'
                         },
                         withCredentials: true,
                     }).then(responseSubscribers => {
-                    setSubscribed(responseSubscribers.data)});
-
+                    setSubscribed(responseSubscribers.data)
+                });
 
 
             } catch (error) {
@@ -172,7 +179,7 @@ export default function PersonalPage() {
             console.log('Subscribing to:', username);
 
             await axios.post(
-                process.env.REACT_APP_BACKEND_URL+`/subscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL + `/subscribe?username=${username}`,
                 {},
                 {
                     headers: {
@@ -191,7 +198,7 @@ export default function PersonalPage() {
             console.log('Unsubscribing to:', username);
 
             await axios.delete(
-                process.env.REACT_APP_BACKEND_URL+`/unsubscribe?username=${username}`,
+                process.env.REACT_APP_BACKEND_URL + `/unsubscribe?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -206,7 +213,7 @@ export default function PersonalPage() {
 
     async function updateUserData() {
         try {
-            const response = await axios.get(process.env.REACT_APP_BACKEND_URL+`/fetch-about-me-with-sub-info?username=${username}`,
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL + `/fetch-about-me-with-sub-info?username=${username}`,
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -224,6 +231,7 @@ export default function PersonalPage() {
     if (!userData) {
         return (
             <div>Loading</div>
+
         )
     }
 
@@ -239,7 +247,7 @@ export default function PersonalPage() {
             console.log('Posting review to:', username);
 
             await axios.put(
-                process.env.REACT_APP_BACKEND_URL+`/reviews/post`,
+                process.env.REACT_APP_BACKEND_URL + `/reviews/post`,
                 {targetUsername: username, reviewText: reviewText},
                 {
                     headers: {
@@ -247,15 +255,13 @@ export default function PersonalPage() {
                     },
                     withCredentials: true,
                 }
-            ).then(response => {
-                if (response.status === 200) {
-                    window.location.reload()
-                }
-            })
-
+            );
         } catch (error) {
             console.log(error)
         }
+
+        window.location.reload()
+
     };
 
     function makeReview(e) {
@@ -275,7 +281,11 @@ export default function PersonalPage() {
                     <h3>{review.author}</h3>
                 </div>
                 <div className="personalPage-review-card-post-area">
-                    <p>{review.reviewText}</p>
+                    <p
+                        className="personalPage-review-card-post-area-text"
+                    >
+                        {review.reviewText}
+                    </p>
                 </div>
             </div>
         )
@@ -301,23 +311,41 @@ export default function PersonalPage() {
                     </div>
                     <div className="mypage--text--container">
                         <h2>{username}</h2>
-                        <p className="mypage-subscribed"> <span className="subscribed-count">{subscribed}</span> Subs</p>
+                        <p className="mypage-subscribed"><span className="subscribed-count">{subscribed}</span> Subs</p>
                         <div className="mypage--bio--container">
                             <p>{userData.aboutMe}</p>
                             <div className="mypage-buttons">
-                                <button
-                                    onClick={handleClick}>{userData.subscribed ? "Unsubscribe" : "Subscribe"}
-                                </button>
-                                <button onClick={revertIsPosted} className="personalPage-review-card-edit">
-                                    Edit review
-                                </button>
+                                {<button
+                                    onClick={handleClick}
+                                    className="personalPage-review-card-edit"
+                                    style={
+                                        userData.subscribed ?
+                                            {background: "#f5f3f4"}
+                                            :
+                                            {background: "#adb5bd", fontWeight: "bold", color: "white"}
+                                    }
+                                >{userData.subscribed ? "Unsubscribe" : "Subscribe"}</button>}
                             </div>
                         </div>
+                    </div>
+                    <div className="edit-review-button">
+
+                        {isPosted &&
+
+                            <box-icon
+                                name='edit-alt'
+                                onClick={revertIsPosted}
+                                className="personalPage-review-card-edit"
+                            >
+                            </box-icon>
+                        }
                     </div>
                     {isPosted ?
                         (
                             <div className="personalPage-review-section"
                                  ref={autoscrollRef}
+                                 onMouseEnter={handleHovering}
+                                 onMouseLeave={handleNotHovering}
                                  style={{overflowX: "auto", whiteSpace: "nowrap"}}
                             >
                                 {isVisible && showReviews}
@@ -348,7 +376,7 @@ export default function PersonalPage() {
                                                 maxLength="150"
                                                 className="review-text-area"
                                             />
-                                        <button onClick={posted} >Post</button>
+                                        <button className="personalPage-review-card-edit" onClick={posted}>Post</button>
                                     </div>
                                 </div>
                                 {isVisible && showReviews}

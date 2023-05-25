@@ -76,7 +76,7 @@ export default function Profile(props) {
         <div className="searchpage--profile">
             <img src={Avatar} className="searchpage--profile--image"/>
             <div className="searchpage--profile--subscribtion">
-                <Link to={`${props.name}`}>
+                <Link to={`/Dashboard?User=${props.id}`}>
                     <h2>{props.name}</h2>
                 </Link>
                 {<button

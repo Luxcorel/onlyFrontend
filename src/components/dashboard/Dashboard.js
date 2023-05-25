@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../navBar/NavBar";
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation,useNavigate} from "react-router-dom";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import CategoryDropdownMenu from "./CategoryDropdownMenu";
@@ -24,8 +24,9 @@ export default function Dashboard() {
     const [userId, setUserId] = useState();
     const [currentStockId, setCurrentStockId] = useState(null);
     const [currentCategoryId, setCurrentCategoryId] = useState(null);
-    const [userName, setUserName] = useState ("n/a")
+    const [userName, setUserName] = useState ("n/a");
 
+    const navigate = useNavigate();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const categoryIndexId = searchParams.get("CategoryId") || null;
@@ -34,23 +35,28 @@ export default function Dashboard() {
 
 
     useEffect(() => {
+        setIsLoading(true)
 
-        if(otherUserID == null) {
-            axios.get(process.env.REACT_APP_BACKEND_URL+"/fetch-current-user-id", {withCredentials: true}).then(
-                (response) => {
-                    if (parseInt(otherUserID) === response.data || otherUserID == null) {
-                        setUserId(response.data)
-                        setOwnDashboard(true)
-                    } else {
-                        setUserId(otherUserID)
-                        setOwnDashboard(false)
-                    }
-                })
-        }
-        else{
-            setUserId(otherUserID)
-        }
-    }, []);
+        console.log(otherUserID)
+        axios.get(process.env.REACT_APP_BACKEND_URL+"/fetch-current-user-id", {withCredentials: true}).then(
+            (response) => {
+                if (parseInt(otherUserID) === response.data || otherUserID == null) {
+                    setUserId(response.data)
+                    setOwnDashboard(true)
+                } else {
+                    setUserId(otherUserID)
+                    setOwnDashboard(false)
+                }
+            }
+        ).catch(() => {
+            if(otherUserID != null){
+                setUserId(otherUserID)
+            }
+            else{
+                navigate(`../Login?Redirect=Dashboard`)
+            }
+        })
+    }, [otherUserID]);
 
     useEffect(() => {
         if (!userId) {
@@ -119,6 +125,16 @@ export default function Dashboard() {
             setIsLoading(false);
         });
     }, [userId]);
+
+    function getCategorySelected() {
+        console.log("test",activeCategoryTab);
+        if(activeCategoryTab != null){
+            return true
+        }
+        else{
+            return false;
+        }
+    }
 
     const handleStockTabClick = (index) => {
         //changes the button index from the input
@@ -271,10 +287,10 @@ export default function Dashboard() {
                         {stocks && stocks.map((stock, index) => (
                             <button
                                 key={stock.id}
-                                className={index === activeStockTab ? "active" : ""}
+                                className={"dashboard-button " + (index === activeStockTab ? "active" : "")}
                                 onClick={() => handleStockTabClick(index)}
                             >
-                                {stock.stock_ref_id.name}
+                                <p className="dashboard-text">{stock.stock_ref_id.name}</p>
                             </button>
                         ))}
                         {/* --STOCK DROPDOWN MENU-- */}
@@ -294,7 +310,7 @@ export default function Dashboard() {
                                     stocks[activeStockTab].categories.map((category, index) => (
                                     <button
                                         key={category.id}
-                                        className={index === activeCategoryTab ? "active" : ""}
+                                        className={"dashboard-button " + (index === activeCategoryTab ? "active" : "")}
                                         onClick={() => handleCategoryTabClick(index, activeStockTab)}
                                     >
                                         {category.name}
@@ -308,6 +324,7 @@ export default function Dashboard() {
                                         addCategory={handleAddCategory}
                                         removeCategory={handleRemoveCategory}
                                         changeCategoryName={handleChangeCategoryName}
+                                        getCategorySelected={getCategorySelected}
                                     />
                                 )}
                             </div>
@@ -333,7 +350,11 @@ export default function Dashboard() {
                                             <div className="dashboard-empty-module">
                                                     <img width="100px" src={emptyCat}/>
                                                 <Link to={`/Studio?stockIndex=${currentStockId}&categoryIndex=${currentCategoryId}`}>
-                                                    <button className="dashboard-empty-module-button">Create your first chart <span className="dashboard-empty-module-button-here">here</span>!</button>
+                                                    <button className="dashboard-empty-module-button">
+                                                        Create your first chart&nbsp;
+                                                        <span className="dashboard-empty-module-button-here">here</span>
+                                                        !
+                                                    </button>
                                                 </Link>
                                             </div>
                                         ) : (

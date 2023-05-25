@@ -1,18 +1,17 @@
 import React, {useEffect} from "react"
 import axios from "axios";
 import SubscriptionProfile from "./SubscriptionProfile";
-import Avatar from "../../assets/images/avatar.png";
 
 export default function SubscriptionBar() {
 
     const [subData, setSubData] = React.useState(null);
     const [suggestedData, setSuggestedData] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
 
         const getSubData = async () => {
             try {
-
                 const response = await
                     axios.get(process.env.REACT_APP_BACKEND_URL+`/user-subscription-list-sorted-by-postdate`,
                         {
@@ -25,6 +24,7 @@ export default function SubscriptionBar() {
                 console.log("Subscription bar data: ", response.data)
 
                 setSubData(response.data)
+                setLoading(false)
 
             } catch (error) {
                 console.log("Get sub data error: ", error)
@@ -49,7 +49,7 @@ export default function SubscriptionBar() {
                 setSuggestedData(response.data)
 
             } catch (error) {
-                console.log(error)
+                console.log("GetSuggestedData error: ", error)
             }
         }
 
@@ -63,9 +63,14 @@ export default function SubscriptionBar() {
     if (subData) {
         for (let i = 0; i < subData.length; i++) {
             const suggestion = subData[i]
+            console.log(suggestion.id)
             showSubs.push(
                 <div>
-                    <SubscriptionProfile key={i} username={subData[i].username} userId={subData[i].id} />
+                    <SubscriptionProfile
+                        key={i}
+                        username={subData[i].username}
+                        id={suggestion.id}
+                    />
                 </div>
             )
         }
@@ -79,13 +84,16 @@ export default function SubscriptionBar() {
                 <div>
                     <SubscriptionProfile
                         key={i}
-                        username={suggestedData[i].profileDTO.username}
-                        relatedStock={suggestedData[i].stock}
+                        username={suggestion.profileDTO.username}
+                        relatedStock={suggestion.stock}
+                        id={suggestion.profileDTO.id}
                     />
                 </div>
             )
         }
     }
+
+
 
 
     return (
@@ -101,7 +109,27 @@ export default function SubscriptionBar() {
                     </div>
                 </div>
                 :
-                <h1>Your subscriptions will appear here</h1>
+                <div>
+                    {loading ? (
+
+                        <div>
+                            <h3>Subscriptions</h3>
+                            <div className="loading-list">
+                                <div className="loading-list-item"></div>
+                            </div>
+                        </div>
+
+                           ) : (
+
+                        <div>
+                            <h2>No subscriptions found</h2>
+                            <p>Browse our amazing content and start following what interests you!</p>
+                        </div>
+                    )}
+
+
+                </div>
+
             }
         </div>
     )

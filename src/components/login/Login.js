@@ -3,7 +3,7 @@ import axios from 'axios';
 import {useLocation, useNavigate, Link} from "react-router-dom";
 
 export default function Login() {
-    document.title="Login"
+    document.title = "Login"
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -13,6 +13,7 @@ export default function Login() {
     const searchParams = new URLSearchParams(location.search);
     const redirect = searchParams.get("Redirect") || null;
     const navigate = useNavigate();
+    const [showErrorMessage, setShowErrorMessage] = React.useState(false)
 
     function handleUsernameChange(event) {
         setUsername(event.target.value);
@@ -26,28 +27,41 @@ export default function Login() {
         event.preventDefault();
         setError(null);
         axios.post(
-            process.env.REACT_APP_BACKEND_URL+'/plz',
-                `username=${username}&password=${password}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    withCredentials: true,
-                }
-            )
+            process.env.REACT_APP_BACKEND_URL + '/plz',
+            `username=${username}&password=${password}`,
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                withCredentials: true,
+            }
+        )
             .then(() => {
-                if(redirect == null){
+                if (redirect == null) {
                     navigate('../Feed')
-                }
-                else{
+                } else {
                     navigate(`../${redirect}`)
                 }
 
             })
             .catch((error) => {
                 setError(error.response.data.error);
+                showErrorMessageForDuration(15000)
             });
         console.log(redirect)
+    }
+
+    function showErrorMessageForDuration(duration) {
+
+        console.log(username)
+
+        /* sets the showErrorMessage to true to show the error messages */
+        setShowErrorMessage(true);
+
+        /* sets timeout for the duration input and then sets the showErrorMessage to false */
+        setTimeout(() => {
+            setShowErrorMessage(false);
+        }, duration);
     }
 
     return (
@@ -66,6 +80,7 @@ export default function Login() {
                         onChange={handleUsernameChange}
                         className="form-control"
                         placeholder="Email"
+                        maxLength={50}
                     />
                     <input
                         type="password"
@@ -75,6 +90,7 @@ export default function Login() {
                         onChange={handlePasswordChange}
                         className="form-control"
                         placeholder="Password"
+                        maxLength={100}
                     />
                 </div>
                 {error && <div className="error-message">{error}</div>}
@@ -85,6 +101,11 @@ export default function Login() {
                     Not a user? Register here.
                 </Link>
             </form>
+            {showErrorMessage && (
+                <div className="login-error-message">
+                    <p>Please check if your username or password is correct</p>
+                </div>
+            )}
         </div>
     );
 }

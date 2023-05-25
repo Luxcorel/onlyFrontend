@@ -91,6 +91,7 @@ export default function StandardToolbar(props) {
                     type="text"
                     placeholder="Enter Chart Name"
                     value={props.studioChart.title.text}
+                    maxLength={30}
                     onChange={(e) => handleChartNameChange(e.target.value)}
                 />
             </div>

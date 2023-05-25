@@ -1,0 +1,333 @@
+
+/**
+Welcome
+ */
+
+.welcome--navbar {
+    width: 100%;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 25px;
+    background-color: #fff;
+
+}
+
+.welcome--navbar > ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+}
+
+.welcome--navbar > ul > li > a {
+    text-decoration: none;
+    color: #b4b4b4;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.welcome--navbar > ul > li {
+    color: #b4b4b4;
+    margin: 15px 85px;
+}
+
+.welcome--navbar > ul > li > a:hover {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+    transition: all 0.3s ease-in-out;
+}
+
+.welcome--navbar--title {
+    font-size: 30px;
+    padding-left: 80px;
+}
+
+.welcome--navbar--title span {
+    font-weight: lighter;
+    color: #8a8a8a;
+}
+
+.welcome--navbar--title:hover {
+    cursor: default;
+}
+
+.welcome--hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.welcome--hero > h1 {
+    font-size: 90px;
+    padding: 30px 30px 0px 30px;
+}
+
+.welcome--hero--fin {
+    text-align: center;
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome--hero--p {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 70px;
+    margin-top: 0;
+}
+
+.welcome--hero--image {
+    width: 50%;
+}
+
+.welcome--hero--buttons--container {
+    display: flex;
+    gap: 50px;
+}
+
+
+.welcome--hero--buttons > button {
+    width: 100px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(217, 217, 217, 0.34);
+    font-size: 13px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px 4px #d2d2d2;
+    transition: all 0.1s ease-in-out;
+    margin-bottom: 100px;
+}
+
+.welcome--hero--buttons button:hover {
+    background-color: rgba(138, 138, 138, 0.34);
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+/* Section 2 */
+
+.welcome-section-two {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 250px;
+    gap: 200px;
+}
+
+.welcome-section-two-content-left > h2 {
+    font-size: 50px;
+}
+
+.welcome-section-two-content-left > p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.welcome-section-two-content-left span {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome-section-two img {
+    width: 100%;
+    max-width: 400px;
+}
+
+.welcome-section-two-content-left {
+    flex: 1;
+    padding-right: 20px;
+    max-width: 300px;
+}
+
+.welcome-section-two-content-right {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .welcome-section-two {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-section-two-content-left {
+        margin-bottom: 20px;
+        padding-right: 0;
+    }
+}
+
+
+
+/* Section 3 */
+
+.welcome-section-three {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 250px;
+    gap: 200px;
+}
+
+.welcome-section-three-content-right > h2 {
+    font-size: 50px;
+}
+
+.welcome-section-three-content-right > p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.welcome-section-three-content-right span {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome-section-three img {
+    width: 100%;
+    max-width: 600px;
+}
+
+.welcome-section-three-content-right {
+    flex: 1;
+    padding-right: 20px;
+    max-width: 400px;
+}
+
+.welcome-section-three-content-left {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .welcome-section-three {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-section-three-content-right {
+        margin-bottom: 20px;
+        padding-right: 0;
+    }
+}
+
+/* Section four */
+.welcome-section-four {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 250px;
+    gap: 200px;
+}
+
+.welcome-section-four-content-left > h2 {
+    font-size: 50px;
+}
+
+.welcome-section-four-content-left > p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.welcome-section-four-content-left span {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome-section-four img {
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.welcome-section-four-content-left {
+    flex: 1;
+    padding-right: 20px;
+    max-width: 350px;
+}
+
+.welcome-section-four-content-right {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .welcome-section-four {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-section-four-content-left {
+        margin-bottom: 20px;
+        padding-right: 0;
+    }
+}
+
+/* Section five */
+.welcome-section-five {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 250px;
+    gap: 200px;
+    padding-bottom: 250px;
+}
+
+.welcome-section-five-content-right > h2 {
+    font-size: 50px;
+}
+
+.welcome-section-five-content-right > p {
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.welcome-section-five-content-right span {
+    background: linear-gradient(45deg, #6bd06b, #ff7373, #62a6c4);
+    background-size: 400% 400%;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 5s ease infinite;
+}
+
+.welcome-section-five img {
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.welcome-section-five-content-right {
+    flex: 1;
+    padding-right: 20px;
+    max-width: 400px;
+}
+
+.welcome-section-five-content-left {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .welcome-section-five {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-section-five-content-right {
+        margin-bottom: 20px;
+        padding-right: 0;
+    }
+}

@@ -260,10 +260,12 @@ export default function StandardTable(props) {
             <div className="studio--category--axis--inputs">
                 <input placeholder={"(X-axis)"}
                        value={props.studioChart.xAxis.title.text}
+                       maxLength={30}
                        onChange={(event) => handleXAxisNameChange(event.target.value)}
                 />
                 <input placeholder={"(Y-axis)"}
                        value={props.studioChart.yAxis.title.text}
+                       maxLength={30}
                        onChange={(event) => handleYAxisNameChange(event.target.value)}
                 />
             </div>
@@ -286,7 +288,7 @@ export default function StandardTable(props) {
                                     key={index}
                                     type="text"
                                     placeholder={`Value ${index + 1}`}
-                                    value={categoryName}
+                                    maxLength={30}
                                     onChange={(e) => handleCategoryNameChange(index, e.target.value)}
                                 />
                             );
@@ -314,13 +316,19 @@ export default function StandardTable(props) {
                         <div className="studio--dataset-tab-container" key={index}
                              style={{display: activeDatasetIndex === index ? "block" : "none"}}>
                             <div className="studio--dataset-input-name">
-                                <input type="text" placeholder="Name" value={dataset.name}
-                                       onChange={(e) => handleDatasetNameChange(index, e.target.value)}/>
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    maxLength={30}
+                                    onChange={(e) => handleDatasetNameChange(index, e.target.value)}
+                                />
                             </div>
                             <div className="dataset-input-fields" onScroll={handleScroll}
                                  ref={ref2}>
                                 {dataset.data.map((data, dataIndex) => (
-                                    <input key={dataIndex} type="number" placeholder={`Data ${dataIndex + 1}`}
+                                    <input key={dataIndex}
+                                           type="number"
+                                           placeholder={`Data ${dataIndex + 1}`}
                                            value={data}
                                            onChange={(e) => handleDatasetDataChange(index, dataIndex, e.target.value)}/>
                                 ))}
