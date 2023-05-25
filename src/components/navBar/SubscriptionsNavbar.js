@@ -13,7 +13,7 @@ export default function SubscriptionsNavbar() {
             try {
 
                 const response = await
-                    axios.get("http://localhost:8080/fetch-current-user-subscriptions", {withCredentials: true}).then((response) => {
+                    axios.get(process.env.REACT_APP_BACKEND_URL+"/fetch-current-user-subscriptions", {withCredentials: true}).then((response) => {
                         setSubData(response.data)
                     })
 
