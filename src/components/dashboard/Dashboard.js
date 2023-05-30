@@ -265,7 +265,9 @@ export default function Dashboard() {
     }
 
     if (isLoading) {
-        return <div className="dashboard-is-loading">Loading dashboard...</div>;
+        return (<div className="loader-container">
+            <div className="loader"></div>
+        </div>);
     }
 
     const { stocks } = dashboard;

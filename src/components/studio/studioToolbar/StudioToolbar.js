@@ -41,7 +41,7 @@ export default function StudioToolbar(props) {
             break;
         }
     return (
-        <>
+        <div className="studio--standardToolBar--container">
             {/* --STANDARD TOOLBAR-- */}
             <StandardToolbar
                 setCategoryId={props.setCategoryId}
@@ -56,17 +56,17 @@ export default function StudioToolbar(props) {
             </div>
             {/* --SUBMIT BUTTON-- */}
             {props.loggedIn &&(
-            <div className="studio--submit">
-                <button onClick={() => props.createChart()}> {submitButton}</button>
-                {editModule && (
-                    <button onClick={() => deleteChart()}>
-                        Delete
-                    </button>
-                )}
-            </div>
+                <div className="studio--submit">
+                    <button onClick={() => props.createChart()}> {submitButton}</button>
+                    {editModule && (
+                        <button onClick={() => deleteChart()}>
+                            Delete
+                        </button>
+                    )}
+                </div>
             )}
+        </div>
 
-        </>
 
     )
 }

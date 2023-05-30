@@ -123,7 +123,8 @@ export default function SubscriptionBar() {
 
                         <div>
                             <h2>No subscriptions found</h2>
-                            <p>Browse our amazing content and start following what interests you!</p>
+                            <p>Browse our amazing content and start following what interests you!<br/><br/>Here are some suggestions:</p>
+                            {showSuggest}
                         </div>
                     )}
 

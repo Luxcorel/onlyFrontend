@@ -17,6 +17,8 @@ export default function EditableLayout(props) {
 
     const layoutRef = useRef(null);
 
+    const [editButtonIsOn, setEditButtonIsOn] = useState(false);
+
     const [isResizable, setIsResizable] = useState(false);
     const [isDraggable, setIsDraggable] = useState(false);
     const [layout, setLayout] = useState(filteredLayout.map((item, index) => ({
@@ -54,6 +56,8 @@ export default function EditableLayout(props) {
             )
         }
 
+        setEditButtonIsOn(!editButtonIsOn);
+
         setIsResizable(!isResizable);
         setIsDraggable(!isDraggable);
     };
@@ -68,8 +72,9 @@ export default function EditableLayout(props) {
         <div>
             {props.ownDashboard &&
                 <label className="switch">
-                    <input type="checkbox" onClick={handleToggle}/>
+                    <input type="checkbox" onClick={handleToggle} />
                     <span className="slider round"></span>
+                    <span className="switch-text">{editButtonIsOn ? 'save' : 'edit'}</span>
                 </label>
             }
             <ResponsiveGridLayout

@@ -269,6 +269,10 @@ export default function StandardTable(props) {
                        onChange={(event) => handleYAxisNameChange(event.target.value)}
                 />
             </div>
+
+
+
+
             <div className="studio--toolbar--columns">
                 <div className="studio--category-container">
                     <h2>Year</h2>

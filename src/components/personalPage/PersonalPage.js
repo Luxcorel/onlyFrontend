@@ -341,15 +341,30 @@ export default function PersonalPage() {
                         }
                     </div>
                     {isPosted ?
-                        (
-                            <div className="personalPage-review-section"
-                                 ref={autoscrollRef}
-                                 onMouseEnter={handleHovering}
-                                 onMouseLeave={handleNotHovering}
-                                 style={{overflowX: "auto", whiteSpace: "nowrap"}}
-                            >
-                                {isVisible && showReviews}
+                        ( reviews ?
+                                (
+
+                            <div>
+                                <div className="personalPage-review-section"
+                                     ref={autoscrollRef}
+                                     onMouseEnter={handleHovering}
+                                     onMouseLeave={handleNotHovering}
+                                     style={{overflowX: "auto", whiteSpace: "nowrap"}}
+                                >
+                                    {isVisible && showReviews}
+                                </div>
                             </div>
+
+
+
+                                )
+                                :
+                                (
+                                    <div className="loader-container" style={{marginTop: "400px"}}>
+                                        <div className="loader"></div>
+                                    </div>)
+
+
                         )
                         :
                         (
