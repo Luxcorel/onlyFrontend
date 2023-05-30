@@ -112,3 +112,8 @@
     background-size: 200px 100%;
     animation: shimmer 1s infinite;
 }
+
+.custom-link {
+    color: black;
+    text-decoration: none;
+}

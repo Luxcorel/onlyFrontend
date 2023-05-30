@@ -15,7 +15,7 @@ export default function SubscriptionProfile(props) {
             marginRight: "20px",
             marginBottom: "20px"
         }}>
-            <Link to={`/Dashboard?User=${props.id}`}>
+            <Link to={`/Dashboard?User=${props.id}`} className="custom-link">
                 <h3>{props.username}</h3>
             </Link>
             <img src={Avatar} width="50px"/>
